@@ -1,0 +1,81 @@
+---
+export interface Props {
+  variant?: 'hero' | 'section' | 'inline';
+}
+const { variant = 'section' } = Astro.props;
+---
+
+{variant === 'section' && (
+  <section id="newsletter" class="bg-forest grain relative overflow-hidden">
+    <div class="ring-lines absolute inset-0 opacity-60 pointer-events-none"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 py-20 text-center">
+      <div class="eyebrow text-amber mb-4">Free weekly field notes</div>
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-cream mb-4">
+        What I learn at the mill,<br/>
+        <em class="text-amber">you learn too.</em>
+      </h2>
+      <p class="text-sawdust/60 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+        Every week: one thing I figured out milling on the South Shore.
+        Species behavior, jig builds, drying mistakes, tool reviews.
+        No fluff. Real sawdust.
+      </p>
+      <form
+        id="newsletter-form"
+        class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+        onsubmit="handleSubscribe(event)"
+      >
+        <input
+          type="email"
+          name="email"
+          placeholder="your@email.com"
+          required
+          class="flex-1 bg-cream/10 border border-cream/20 text-cream placeholder:text-cream/30
+                 font-mono text-sm px-4 py-3 focus:outline-none focus:border-amber transition-colors"
+        />
+        <button type="submit" class="btn-primary whitespace-nowrap">
+          Get the Notes
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+      <p id="form-success" class="hidden mt-4 font-mono text-xs text-amber tracking-wider">
+        ✓ You're in. First issue coming soon.
+      </p>
+      <p class="mt-4 font-mono text-[10px] text-sawdust/30 tracking-wider">
+        Free forever. Unsubscribe anytime. No spam — ever.
+      </p>
+    </div>
+  </section>
+)}
+
+{variant === 'inline' && (
+  <div class="border border-amber/30 bg-amber/5 p-6">
+    <div class="eyebrow text-amber mb-2">Free field notes</div>
+    <p class="text-sm text-forest/70 mb-4">Weekly sawmill dispatches from the South Shore.</p>
+    <form class="flex gap-2" onsubmit="handleSubscribe(event)">
+      <input
+        type="email"
+        placeholder="your@email.com"
+        required
+        class="flex-1 border border-forest/20 bg-cream font-mono text-sm px-3 py-2
+               focus:outline-none focus:border-amber transition-colors"
+      />
+      <button type="submit" class="btn-primary text-xs px-4 py-2">Subscribe</button>
+    </form>
+  </div>
+)}
+
+<script>
+  function handleSubscribe(e: Event) {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const success = document.getElementById('form-success');
+    // TODO: Wire to ConvertKit API endpoint
+    // const email = new FormData(form).get('email');
+    // fetch('/api/subscribe', { method: 'POST', body: JSON.stringify({ email }) });
+    form.style.display = 'none';
+    if (success) success.classList.remove('hidden');
+  }
+  (window as any).handleSubscribe = handleSubscribe;
+</script>

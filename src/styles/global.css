@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --forest:    #1C2E1C;
+  --bark:      #3D2410;
+  --amber:     #C8881A;
+  --amber-lt:  #E8A832;
+  --sawdust:   #F7F0E4;
+  --cream:     #FAF6EE;
+  --steel:     #4A5568;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+
+  body {
+    @apply bg-cream text-forest font-body antialiased;
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent 0px, transparent 80px,
+      rgba(28,46,28,0.015) 80px, rgba(28,46,28,0.015) 81px
+    );
+  }
+
+  h1, h2, h3, h4 { @apply font-display; }
+
+  ::selection { background: #C8881A; color: #FAF6EE; }
+}
+
+@layer components {
+
+  /* ── NAV ── */
+  .nav-link {
+    @apply font-mono text-xs tracking-widest uppercase text-forest/60
+           hover:text-amber transition-colors duration-200;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-forest text-amber-pale
+           font-mono text-xs tracking-widest uppercase px-6 py-3
+           border border-forest hover:bg-bark hover:border-bark
+           transition-all duration-200;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 bg-transparent text-forest
+           font-mono text-xs tracking-widest uppercase px-6 py-3
+           border border-forest/40 hover:border-forest hover:bg-forest/5
+           transition-all duration-200;
+  }
+
+  /* ── SECTION LABELS ── */
+  .eyebrow {
+    @apply font-mono text-[10px] tracking-[0.25em] uppercase text-amber;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    @apply bg-white border border-forest/10 hover:border-amber/40
+           transition-colors duration-300;
+  }
+
+  /* ── WOOD RULE ── */
+  .wood-rule {
+    @apply border-t-2 border-amber/60;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── RING LINES ── */
+  .ring-lines {
+    background-image: repeating-linear-gradient(
+      180deg,
+      transparent 0px, transparent 28px,
+      rgba(61,36,16,0.06) 28px, rgba(61,36,16,0.06) 29px
+    );
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.7s ease forwards; }
+  .fade-up-1 { animation: fadeUp 0.7s 0.1s ease both; }
+  .fade-up-2 { animation: fadeUp 0.7s 0.25s ease both; }
+  .fade-up-3 { animation: fadeUp 0.7s 0.4s ease both; }
+  .fade-up-4 { animation: fadeUp 0.7s 0.55s ease both; }
+
+  @keyframes sawSlide {
+    from { transform: scaleX(0); transform-origin: left; }
+    to   { transform: scaleX(1); transform-origin: left; }
+  }
+  .saw-line { animation: sawSlide 1s 0.3s ease both; }
+}

@@ -1,0 +1,262 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Newsletter from '../components/Newsletter.astro';
+---
+
+<Base title="South Shore Sawyer — Real Sawmill Knowledge from Plymouth, MA">
+
+  <Nav />
+
+  <!-- ═══════════════════════════════════════════════════
+       HERO
+  ════════════════════════════════════════════════════ -->
+  <section class="relative min-h-screen flex items-center bg-forest grain overflow-hidden pt-16">
+
+    <!-- Wood grain rings background -->
+    <div class="ring-lines absolute inset-0 opacity-80 pointer-events-none"></div>
+
+    <!-- Diagonal amber accent -->
+    <div class="absolute top-0 right-0 w-1/2 h-full opacity-5 pointer-events-none"
+         style="background: linear-gradient(135deg, transparent 40%, #C8881A 100%);">
+    </div>
+
+    <!-- Vertical amber rule left -->
+    <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber/40 saw-line"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Left: copy -->
+      <div>
+        <div class="eyebrow text-amber/80 mb-6 fade-up-1">
+          Plympton, MA &nbsp;·&nbsp; Woodland Mills Operator &nbsp;·&nbsp; Est. 2024
+        </div>
+
+        <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-black text-cream leading-[1.05] mb-6 fade-up-2">
+          From log<br/>
+          <em class="text-amber">to lumber.</em><br/>
+          No mystery.
+        </h1>
+
+        <p class="text-sawdust/60 text-xl leading-relaxed max-w-lg mb-10 fade-up-3">
+          Real sawmill knowledge from a Woodland Mills WM3 operator on the South Shore of Massachusetts.
+          AI-powered tools, honest species guides, and a community for people who work wood seriously.
+        </p>
+
+        <div class="flex flex-wrap gap-4 fade-up-4">
+          <a href="/calculator" class="btn-primary text-sm">
+            Free Lumber Calculator
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="/blog" class="btn-secondary border-cream/20 text-cream hover:bg-cream/10 text-sm">
+            Read Field Notes
+          </a>
+        </div>
+
+        <!-- Social proof -->
+        <div class="mt-12 pt-8 border-t border-cream/10 flex gap-8 fade-up-4">
+          {[
+            { num: '1,000+', label: 'Board feet milled' },
+            { num: '50+',    label: 'Species documented' },
+            { num: 'Free',   label: 'Lumber calculator' },
+          ].map(({ num, label }) => (
+            <div>
+              <div class="font-display font-bold text-2xl text-amber">{num}</div>
+              <div class="font-mono text-[10px] text-sawdust/40 tracking-wider uppercase mt-1">{label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Right: featured card -->
+      <div class="fade-up-3">
+        <div class="relative bg-bark/60 border border-amber/20 p-8">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-amber saw-line"></div>
+          <div class="eyebrow text-amber/60 mb-4">Latest from the mill</div>
+          <h3 class="font-display text-2xl font-bold text-cream mb-3">
+            Milling White Oak on the WM3: What I Learned the Hard Way
+          </h3>
+          <p class="text-sawdust/50 text-sm leading-relaxed mb-6">
+            White oak is unforgiving. Grain direction, moisture content, and blade tension all
+            conspire against you. Here's the setup that finally worked after three wasted logs.
+          </p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-amber flex items-center justify-center font-display font-bold text-xs text-bark">SS</div>
+              <div>
+                <div class="font-mono text-xs text-cream">South Shore Sawyer</div>
+                <div class="font-mono text-[10px] text-sawdust/30">April 2025</div>
+              </div>
+            </div>
+            <a href="/blog" class="font-mono text-[10px] text-amber tracking-widest uppercase hover:text-amber-light transition-colors">
+              Read →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+      <div class="font-mono text-[9px] text-sawdust tracking-widest uppercase">Scroll</div>
+      <div class="w-px h-8 bg-sawdust/40 animate-pulse"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       WHAT YOU GET
+  ════════════════════════════════════════════════════ -->
+  <section class="max-w-7xl mx-auto px-6 py-24">
+    <div class="text-center mb-16">
+      <div class="eyebrow mb-3">What's here</div>
+      <h2 class="font-display text-4xl font-bold text-forest">Built for serious sawyers</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-forest/10">
+      {[
+        {
+          icon: '📐',
+          title: 'AI Lumber Tools',
+          desc: 'Board foot calculator, drying time estimator, green weight calculator, and a Claude-powered log advisor. Free to use, no account required.',
+          href: '/calculator',
+          cta: 'Open the calculator',
+        },
+        {
+          icon: '🌳',
+          title: 'Species Library',
+          desc: 'Detailed guides for 50+ hardwood and softwood species: grain behavior, drying times, ideal applications, and milling notes from the WM3.',
+          href: '/species',
+          cta: 'Browse species',
+        },
+        {
+          icon: '📓',
+          title: 'Field Notes',
+          desc: 'Weekly dispatches from the mill. Honest accounts of what worked, what didn\'t, and what I\'d do differently. No sponsor-speak.',
+          href: '/blog',
+          cta: 'Read the notes',
+        },
+      ].map(({ icon, title, desc, href, cta }) => (
+        <div class="card bg-white p-8 group">
+          <div class="text-3xl mb-5">{icon}</div>
+          <h3 class="font-display text-xl font-bold text-forest mb-3">{title}</h3>
+          <p class="text-steel text-sm leading-relaxed mb-6">{desc}</p>
+          <a href={href} class="eyebrow text-amber hover:text-amber-light transition-colors group-hover:underline">
+            {cta} →
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       CALCULATOR PREVIEW
+  ════════════════════════════════════════════════════ -->
+  <section class="bg-sawdust border-y border-forest/10 py-24">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <div>
+        <div class="eyebrow mb-4">Free tool</div>
+        <h2 class="font-display text-4xl font-bold text-forest mb-6">
+          Stop guessing board feet.<br/>
+          <em class="text-amber">Start knowing.</em>
+        </h2>
+        <p class="text-steel leading-relaxed mb-8">
+          The South Shore Sawyer lumber calculator handles board footage, green weight estimation,
+          drying time by species, and rough-to-finished yield. Built by a programmer who mills —
+          not a programmer who guesses.
+        </p>
+        <ul class="space-y-3 mb-8">
+          {[
+            'Board foot calculator with rough & finished dimensions',
+            'Drying time estimates for 50+ species',
+            'Green-to-dry weight calculator',
+            'Log-to-lumber yield estimator',
+            'AI log advisor (Pro) — "what can I build with this?"',
+          ].map(item => (
+            <li class="flex items-start gap-3 text-sm text-steel">
+              <div class="w-5 h-5 bg-amber/20 border border-amber/40 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M2 5l2 2 4-4" stroke="#C8881A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              {item}
+            </li>
+          ))}
+        </ul>
+        <a href="/calculator" class="btn-primary">
+          Open free calculator
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Calculator mini preview -->
+      <div class="bg-white border border-forest/10 shadow-sm">
+        <div class="bg-forest px-6 py-3 flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-amber/60"></div>
+          <div class="w-2 h-2 rounded-full bg-amber/40"></div>
+          <div class="w-2 h-2 rounded-full bg-amber/20"></div>
+          <div class="font-mono text-[10px] text-sawdust/40 tracking-wider ml-2">Board Foot Calculator</div>
+        </div>
+        <div class="p-6 space-y-4">
+          {[
+            { label: 'Thickness (inches)', value: '2', unit: 'in' },
+            { label: 'Width (inches)', value: '10', unit: 'in' },
+            { label: 'Length (feet)', value: '8', unit: 'ft' },
+            { label: 'Board count', value: '24', unit: 'pcs' },
+          ].map(({ label, value, unit }) => (
+            <div>
+              <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-1">{label}</label>
+              <div class="flex items-center border border-forest/15 bg-sawdust/50">
+                <span class="flex-1 font-mono text-lg text-forest px-4 py-2">{value}</span>
+                <span class="font-mono text-xs text-steel/40 px-4 py-2 border-l border-forest/10">{unit}</span>
+              </div>
+            </div>
+          ))}
+          <div class="bg-forest text-cream p-4 mt-2">
+            <div class="font-mono text-[10px] text-amber/60 tracking-widest uppercase mb-1">Result</div>
+            <div class="font-display text-3xl font-bold text-amber">320 <span class="text-xl font-normal text-cream/60">board feet</span></div>
+            <div class="font-mono text-xs text-sawdust/40 mt-1">≈ 1,280 lbs green weight (white oak)</div>
+          </div>
+          <a href="/calculator" class="btn-primary w-full justify-center text-xs mt-2">
+            Open full calculator with AI advisor →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       COMMUNITY CTA
+  ════════════════════════════════════════════════════ -->
+  <section class="max-w-7xl mx-auto px-6 py-24 text-center">
+    <div class="eyebrow mb-4">Founding members</div>
+    <h2 class="font-display text-4xl md:text-5xl font-bold text-forest mb-6">
+      The Mill is open.<br/>
+      <em class="text-amber">Come saw with us.</em>
+    </h2>
+    <p class="text-steel max-w-xl mx-auto leading-relaxed mb-10">
+      Join a community of serious hobbyists, small producers, and professional sawyers.
+      Monthly live sessions, member-only content, early access to new tools.
+      Founding member rate: $19/mo.
+    </p>
+    <a href="/community" class="btn-primary text-base px-8 py-4">
+      See what's inside
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       NEWSLETTER
+  ════════════════════════════════════════════════════ -->
+  <Newsletter variant="section" />
+
+  <Footer />
+
+</Base>

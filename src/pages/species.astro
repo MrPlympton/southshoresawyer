@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Newsletter from '../components/Newsletter.astro';
+
+const species = [
+  { name: 'White Oak', latin: 'Quercus alba', rating: 5, drying: 'Slow (12 mo/in)', use: 'Furniture, flooring, barrels', notes: 'The workhorse of the South Shore. Beautiful ray flecks when quartersawn. Patience required for drying.', available: true },
+  { name: 'Red Oak',   latin: 'Quercus rubra', rating: 4, drying: 'Medium (8 mo/in)', use: 'Cabinets, furniture, flooring', notes: 'More porous than white oak — not suitable for outdoor use without treatment. Machines beautifully.', available: true },
+  { name: 'White Pine', latin: 'Pinus strobus', rating: 4, drying: 'Fast (3 mo/in)', use: 'Construction, shiplap, paneling', notes: 'Grows everywhere on the South Shore. Soft and easy to mill. Watch for pitch pockets near knots.', available: true },
+  { name: 'Black Cherry', latin: 'Prunus serotina', rating: 5, drying: 'Medium (5 mo/in)', use: 'Fine furniture, cabinets, turning', notes: 'Darkens beautifully with light exposure. One of the finest American hardwoods. Worth every minute of patience.', available: true },
+  { name: 'Hard Maple', latin: 'Acer saccharum', rating: 4, drying: 'Medium (6 mo/in)', use: 'Floors, countertops, butcher block', notes: 'Dense and demanding on blades. Keep them sharp. Curly and bird\'s eye patterns add significant value.', available: true },
+  { name: 'Black Walnut', latin: 'Juglans nigra', rating: 5, drying: 'Medium (4 mo/in)', use: 'Premium furniture, gunstocks, turning', notes: 'The most valuable common North American hardwood. Rarer on the South Shore but worth seeking out.', available: true },
+  { name: 'Eastern Red Cedar', latin: 'Juniperus virginiana', rating: 3, drying: 'Fast (3 mo/in)', use: 'Closet liners, chests, outdoor projects', notes: 'Aromatic and naturally rot-resistant. Mills beautifully but dulls blades faster than you\'d expect.', available: true },
+  { name: 'White Ash', latin: 'Fraxinus americana', rating: 3, drying: 'Medium (4 mo/in)', use: 'Tool handles, flooring, sporting goods', notes: 'Mostly killed by Emerald Ash Borer on the South Shore. Mill what\'s standing dead — it\'s still usable timber.', available: false },
+];
+---
+
+<Base
+  title="Wood Species Guide — South Shore Sawyer"
+  description="Detailed milling guides for 50+ hardwood and softwood species. Drying times, grain behavior, ideal uses, and notes from the WM3."
+>
+  <Nav />
+
+  <main class="pt-24">
+    <div class="bg-forest grain relative overflow-hidden">
+      <div class="ring-lines absolute inset-0 opacity-60 pointer-events-none"></div>
+      <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber/60"></div>
+      <div class="relative z-10 max-w-7xl mx-auto px-6 py-16">
+        <div class="eyebrow text-amber/70 mb-3">50+ species documented</div>
+        <h1 class="font-display text-5xl font-black text-cream mb-4">Species Library</h1>
+        <p class="text-sawdust/50 text-lg max-w-xl">
+          Milling notes for every species I've run through the WM3. What works, what doesn't, and what to expect.
+        </p>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 py-16">
+
+      <!-- Filter bar -->
+      <div class="flex flex-wrap gap-4 items-center mb-10 pb-8 border-b border-forest/10">
+        <input
+          type="text"
+          placeholder="Search species..."
+          class="border border-forest/15 bg-sawdust/60 font-mono text-sm px-4 py-2 w-64
+                 focus:outline-none focus:border-amber transition-colors"
+        />
+        <div class="flex gap-2 ml-auto">
+          {['All', 'Hardwood', 'Softwood', 'Available locally'].map((f, i) => (
+            <button class={`font-mono text-[10px] tracking-widest uppercase px-3 py-2 border transition-colors
+              ${i === 0 ? 'bg-forest text-amber border-forest' : 'text-steel/50 border-forest/20 hover:text-forest'}`}>
+              {f}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Species grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {species.map(sp => (
+          <div class={`card bg-white p-6 flex gap-5 group cursor-pointer ${!sp.available ? 'opacity-70' : ''}`}>
+            <!-- Color swatch -->
+            <div class="w-12 flex-shrink-0">
+              <div class="w-12 h-20 bg-gradient-to-b from-amber/20 to-bark/10 border border-forest/10
+                          flex items-center justify-center">
+                <div class="w-6 h-6 rounded-full bg-amber/30 border border-amber/40"></div>
+              </div>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-start justify-between mb-1">
+                <div>
+                  <h3 class="font-display font-bold text-forest text-lg leading-tight">{sp.name}</h3>
+                  <div class="font-mono text-[10px] text-steel/40 italic">{sp.latin}</div>
+                </div>
+                <div class="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <div class={`w-2 h-2 rounded-full ${i < sp.rating ? 'bg-amber' : 'bg-forest/10'}`}></div>
+                  ))}
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 mt-3 mb-3">
+                <div>
+                  <div class="font-mono text-[9px] text-steel/40 tracking-wider uppercase">Drying</div>
+                  <div class="font-mono text-xs text-forest mt-0.5">{sp.drying}</div>
+                </div>
+                <div>
+                  <div class="font-mono text-[9px] text-steel/40 tracking-wider uppercase">Best for</div>
+                  <div class="font-mono text-xs text-forest mt-0.5">{sp.use}</div>
+                </div>
+              </div>
+
+              <p class="text-steel text-xs leading-relaxed">{sp.notes}</p>
+
+              {!sp.available && (
+                <div class="mt-2 font-mono text-[9px] text-amber/60 tracking-widest uppercase">
+                  ⚠ Limited local availability
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-12 text-center">
+        <p class="text-steel/50 font-mono text-xs mb-4">More species being added weekly. Have a species you want covered?</p>
+        <a href="/#newsletter" class="btn-secondary text-sm">Suggest a species →</a>
+      </div>
+    </div>
+  </main>
+
+  <Newsletter variant="section" />
+  <Footer />
+</Base>

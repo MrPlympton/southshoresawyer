@@ -1,0 +1,53 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-forest text-sawdust mt-24">
+  <div class="max-w-7xl mx-auto px-6 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+
+      <!-- Brand -->
+      <div class="md:col-span-2">
+        <div class="font-display font-bold text-2xl text-cream mb-2">South Shore Sawyer</div>
+        <div class="font-mono text-[10px] text-amber tracking-widest uppercase mb-4">Plympton, Massachusetts</div>
+        <p class="text-sawdust/60 text-sm leading-relaxed max-w-sm">
+          Real sawmill knowledge from a Woodland Mills operator on the South Shore.
+          AI-powered tools, species guides, and a community for people who work wood seriously.
+        </p>
+        <div class="flex gap-4 mt-6">
+          <a href="https://youtube.com/@SouthShoreSawyer" class="font-mono text-[10px] text-amber/70 hover:text-amber tracking-widest uppercase transition-colors">YouTube</a>
+          <a href="https://instagram.com/SouthShoreSawyer" class="font-mono text-[10px] text-amber/70 hover:text-amber tracking-widest uppercase transition-colors">Instagram</a>
+          <a href="https://x.com/SSSawyer" class="font-mono text-[10px] text-amber/70 hover:text-amber tracking-widest uppercase transition-colors">X</a>
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <div class="eyebrow text-amber/60 mb-4">Content</div>
+        <ul class="space-y-2">
+          {['Field Notes', 'Species Guide', 'Mill Setup', 'Jigs & Fixtures', 'Drying & Curing'].map(l => (
+            <li><a href="#" class="text-sawdust/50 hover:text-amber text-sm transition-colors">{l}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <div class="eyebrow text-amber/60 mb-4">Tools</div>
+        <ul class="space-y-2">
+          {['Board Foot Calculator', 'Drying Time Estimator', 'Species Selector', 'Log Advisor AI', 'Community'].map(l => (
+            <li><a href="#" class="text-sawdust/50 hover:text-amber text-sm transition-colors">{l}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="wood-rule border-amber/20 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="font-mono text-[10px] text-sawdust/30 tracking-wider">
+        © {year} South Shore Sawyer · Plympton, MA 02367
+      </div>
+      <div class="font-mono text-[10px] text-sawdust/30 tracking-wider">
+        Built on the South Shore. Milled from scratch.
+      </div>
+    </div>
+  </div>
+</footer>

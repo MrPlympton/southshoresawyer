@@ -1,0 +1,396 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Newsletter from '../components/Newsletter.astro';
+---
+
+<Base
+  title="Free Lumber Calculator — Board Feet, Drying Time & More | South Shore Sawyer"
+  description="Free board foot calculator, drying time estimator, green weight calculator, and log yield estimator. Built by a Woodland Mills operator on the South Shore of MA."
+>
+  <Nav />
+
+  <main class="pt-24">
+
+    <!-- Header -->
+    <div class="bg-forest grain relative overflow-hidden">
+      <div class="ring-lines absolute inset-0 opacity-60 pointer-events-none"></div>
+      <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber/60"></div>
+      <div class="relative z-10 max-w-7xl mx-auto px-6 py-16">
+        <div class="eyebrow text-amber/70 mb-3">Free tool</div>
+        <h1 class="font-display text-5xl font-black text-cream mb-4">Lumber Calculator</h1>
+        <p class="text-sawdust/50 text-lg max-w-xl">
+          Board feet, drying time, green weight, and log yield. Built by someone who actually uses a sawmill.
+        </p>
+      </div>
+    </div>
+
+    <!-- Calculator -->
+    <div class="max-w-7xl mx-auto px-6 py-16">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- LEFT: Tabs + Inputs -->
+        <div class="lg:col-span-2 space-y-6">
+
+          <!-- Tab bar -->
+          <div class="flex border-b border-forest/10 gap-0">
+            {['Board Feet', 'Drying Time', 'Green Weight', 'Log Yield'].map((tab, i) => (
+              <button
+                class={`calc-tab font-mono text-xs tracking-widest uppercase px-5 py-3
+                        border-b-2 transition-colors ${i === 0
+                          ? 'border-amber text-amber'
+                          : 'border-transparent text-steel/50 hover:text-forest'}`}
+                data-tab={i}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          <!-- TAB 0: Board Feet -->
+          <div id="tab-0" class="calc-panel space-y-5">
+            <div class="grid grid-cols-2 gap-4">
+              {[
+                { id: 'bf-thickness', label: 'Thickness', placeholder: '2', unit: 'inches', hint: 'Rough sawn thickness' },
+                { id: 'bf-width',     label: 'Width',     placeholder: '10', unit: 'inches', hint: 'Average board width' },
+                { id: 'bf-length',    label: 'Length',    placeholder: '8',  unit: 'feet',   hint: 'Board length' },
+                { id: 'bf-count',     label: 'Quantity',  placeholder: '1',  unit: 'boards',  hint: 'Number of boards' },
+              ].map(({ id, label, placeholder, unit, hint }) => (
+                <div>
+                  <label class="font-mono text-[10px] tracking-widest uppercase text-steel/60 block mb-1" for={id}>
+                    {label} <span class="text-amber/60">({unit})</span>
+                  </label>
+                  <input
+                    id={id}
+                    type="number"
+                    placeholder={placeholder}
+                    min="0"
+                    step="0.125"
+                    class="w-full border border-forest/15 bg-sawdust/60 font-mono text-lg text-forest
+                           px-4 py-3 focus:outline-none focus:border-amber transition-colors"
+                  />
+                  <div class="font-mono text-[9px] text-steel/40 mt-1">{hint}</div>
+                </div>
+              ))}
+            </div>
+            <button onclick="calcBoardFeet()" class="btn-primary w-full justify-center">
+              Calculate Board Feet
+            </button>
+            <div id="bf-result" class="hidden bg-forest text-cream p-6">
+              <div class="font-mono text-[10px] text-amber/60 tracking-widest uppercase mb-2">Result</div>
+              <div class="font-display text-4xl font-bold text-amber" id="bf-output">—</div>
+              <div class="font-mono text-sm text-sawdust/50 mt-1" id="bf-sub">board feet</div>
+            </div>
+          </div>
+
+          <!-- TAB 1: Drying Time -->
+          <div id="tab-1" class="calc-panel hidden space-y-5">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="font-mono text-[10px] tracking-widest uppercase text-steel/60 block mb-1" for="dry-species">Species</label>
+                <select id="dry-species" class="w-full border border-forest/15 bg-sawdust/60 font-mono text-sm text-forest px-4 py-3 focus:outline-none focus:border-amber">
+                  <option value="12">White Oak (12 mo/in)</option>
+                  <option value="8">Red Oak (8 mo/in)</option>
+                  <option value="6">Hard Maple (6 mo/in)</option>
+                  <option value="5">Cherry (5 mo/in)</option>
+                  <option value="4">Walnut (4 mo/in)</option>
+                  <option value="4">White Ash (4 mo/in)</option>
+                  <option value="3">White Pine (3 mo/in)</option>
+                  <option value="3">Eastern Red Cedar (3 mo/in)</option>
+                  <option value="5">Hickory (5 mo/in)</option>
+                  <option value="6">Beech (6 mo/in)</option>
+                  <option value="7">Elm (7 mo/in)</option>
+                  <option value="4">Butternut (4 mo/in)</option>
+                </select>
+              </div>
+              <div>
+                <label class="font-mono text-[10px] tracking-widest uppercase text-steel/60 block mb-1" for="dry-thickness">Thickness (inches)</label>
+                <input id="dry-thickness" type="number" placeholder="2" min="0.25" step="0.25"
+                  class="w-full border border-forest/15 bg-sawdust/60 font-mono text-lg text-forest px-4 py-3 focus:outline-none focus:border-amber" />
+              </div>
+              <div>
+                <label class="font-mono text-[10px] tracking-widest uppercase text-steel/60 block mb-1">Drying method</label>
+                <select id="dry-method" class="w-full border border-forest/15 bg-sawdust/60 font-mono text-sm text-forest px-4 py-3 focus:outline-none focus:border-amber">
+                  <option value="1">Air drying (stickered, outdoors)</option>
+                  <option value="0.4">Kiln drying</option>
+                  <option value="0.7">Air drying (covered shed)</option>
+                </select>
+              </div>
+              <div>
+                <label class="font-mono text-[10px] tracking-widest uppercase text-steel/60 block mb-1">Target MC (%)</label>
+                <select id="dry-target" class="w-full border border-forest/15 bg-sawdust/60 font-mono text-sm text-forest px-4 py-3 focus:outline-none focus:border-amber">
+                  <option value="1">6–8% (furniture/fine work)</option>
+                  <option value="0.8">8–12% (interior construction)</option>
+                  <option value="0.6">15–19% (exterior/framing)</option>
+                </select>
+              </div>
+            </div>
+            <button onclick="calcDrying()" class="btn-primary w-full justify-center">Estimate Drying Time</button>
+            <div id="dry-result" class="hidden bg-forest text-cream p-6">
+              <div class="font-mono text-[10px] text-amber/60 tracking-widest uppercase mb-2">Estimated drying time</div>
+              <div class="font-display text-4xl font-bold text-amber" id="dry-output">—</div>
+              <div class="font-mono text-sm text-sawdust/50 mt-2" id="dry-sub"></div>
+              <div class="mt-4 pt-4 border-t border-cream/10 font-mono text-xs text-sawdust/40">
+                Rule of thumb: 1 year per inch for air-dried hardwoods. Conditions vary significantly.
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: Green Weight -->
+          <div id="tab-2" class="calc-panel hidden space-y-5">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="font-mono text-[10px] tracking-widest uppercase text-steel/60 block mb-1" for="wt-species">Species</label>
+                <select id="wt-species" class="w-full border border-forest/15 bg-sawdust/60 font-mono text-sm text-forest px-4 py-3 focus:outline-none focus:border-amber">
+                  <option value="58">White Oak (58 lb/ft³)</option>
+                  <option value="64">Red Oak (64 lb/ft³)</option>
+                  <option value="56">Hard Maple (56 lb/ft³)</option>
+                  <option value="45">Cherry (45 lb/ft³)</option>
+                  <option value="55">Walnut (55 lb/ft³)</option>
+                  <option value="46">White Ash (46 lb/ft³)</option>
+                  <option value="35">White Pine (35 lb/ft³)</option>
+                  <option value="33">Eastern Red Cedar (33 lb/ft³)</option>
+                  <option value="68">Hickory (68 lb/ft³)</option>
+                  <option value="54">Beech (54 lb/ft³)</option>
+                </select>
+              </div>
+              <div>
+                <label class="font-mono text-[10px] tracking-widest uppercase text-steel/60 block mb-1" for="wt-bf">Board Feet</label>
+                <input id="wt-bf" type="number" placeholder="100" min="1"
+                  class="w-full border border-forest/15 bg-sawdust/60 font-mono text-lg text-forest px-4 py-3 focus:outline-none focus:border-amber" />
+              </div>
+            </div>
+            <button onclick="calcWeight()" class="btn-primary w-full justify-center">Calculate Green Weight</button>
+            <div id="wt-result" class="hidden bg-forest text-cream p-6">
+              <div class="font-mono text-[10px] text-amber/60 tracking-widest uppercase mb-2">Estimated green weight</div>
+              <div class="font-display text-4xl font-bold text-amber" id="wt-output">—</div>
+              <div class="font-mono text-sm text-sawdust/50 mt-1" id="wt-sub"></div>
+            </div>
+          </div>
+
+          <!-- TAB 3: Log Yield -->
+          <div id="tab-3" class="calc-panel hidden space-y-5">
+            <div class="grid grid-cols-2 gap-4">
+              {[
+                { id: 'log-diameter', label: 'Small-end diameter', placeholder: '16', unit: 'inches' },
+                { id: 'log-length',   label: 'Log length',          placeholder: '12', unit: 'feet' },
+              ].map(({ id, label, placeholder, unit }) => (
+                <div>
+                  <label class="font-mono text-[10px] tracking-widest uppercase text-steel/60 block mb-1" for={id}>
+                    {label} ({unit})
+                  </label>
+                  <input id={id} type="number" placeholder={placeholder} min="1"
+                    class="w-full border border-forest/15 bg-sawdust/60 font-mono text-lg text-forest px-4 py-3 focus:outline-none focus:border-amber" />
+                </div>
+              ))}
+              <div>
+                <label class="font-mono text-[10px] tracking-widest uppercase text-steel/60 block mb-1">Slab/kerf waste</label>
+                <select id="log-waste" class="w-full border border-forest/15 bg-sawdust/60 font-mono text-sm text-forest px-4 py-3 focus:outline-none focus:border-amber">
+                  <option value="0.65">Standard (35% waste)</option>
+                  <option value="0.75">Efficient (25% waste)</option>
+                  <option value="0.55">High waste (45% — small logs)</option>
+                </select>
+              </div>
+            </div>
+            <button onclick="calcYield()" class="btn-primary w-full justify-center">Estimate Log Yield</button>
+            <div id="log-result" class="hidden bg-forest text-cream p-6">
+              <div class="font-mono text-[10px] text-amber/60 tracking-widest uppercase mb-2">Estimated yield</div>
+              <div class="font-display text-4xl font-bold text-amber" id="log-output">—</div>
+              <div class="font-mono text-sm text-sawdust/50 mt-1" id="log-sub"></div>
+              <div class="mt-4 pt-4 border-t border-cream/10 font-mono text-xs text-sawdust/40">
+                Based on Doyle Log Scale. Actual yield varies with taper, defects, and operator skill.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: AI Advisor panel -->
+        <div class="space-y-6">
+          <div class="bg-forest border border-amber/20 p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-8 h-8 bg-amber flex items-center justify-center flex-shrink-0">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2a6 6 0 100 12A6 6 0 008 2z" stroke="#1C2E1C" stroke-width="1.5"/>
+                  <path d="M8 6v2.5L10 10" stroke="#1C2E1C" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <div class="font-display font-bold text-cream text-sm">AI Log Advisor</div>
+                <div class="font-mono text-[9px] text-amber/60 tracking-wider">Powered by Claude</div>
+              </div>
+              <span class="ml-auto font-mono text-[9px] bg-amber/20 text-amber px-2 py-1 border border-amber/30">PRO</span>
+            </div>
+            <p class="text-sawdust/50 text-xs leading-relaxed mb-4">
+              Describe your log — species, dimensions, any defects — and get recommendations on the best cuts, yields, and what to build with it.
+            </p>
+            <textarea
+              id="ai-prompt"
+              placeholder="e.g. I have a 14-inch white oak log, 10 feet long, with a slight curve and some checking on the ends..."
+              rows="4"
+              class="w-full bg-cream/5 border border-cream/10 text-sawdust/70 placeholder:text-sawdust/20
+                     font-mono text-xs p-3 focus:outline-none focus:border-amber transition-colors resize-none"
+            ></textarea>
+            <button
+              id="ai-btn"
+              onclick="askAdvisor()"
+              class="btn-primary w-full justify-center mt-3 text-xs"
+            >
+              Ask the Advisor
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div id="ai-result" class="hidden mt-4 pt-4 border-t border-cream/10">
+              <div class="font-mono text-[9px] text-amber/60 tracking-widest uppercase mb-2">Advisor says</div>
+              <div id="ai-output" class="text-sawdust/70 text-xs leading-relaxed font-body"></div>
+            </div>
+            <p class="mt-3 font-mono text-[9px] text-sawdust/20 text-center">
+              Join the community for full AI advisor access
+            </p>
+          </div>
+
+          <!-- Quick reference -->
+          <div class="border border-forest/10 bg-sawdust/40 p-5">
+            <div class="eyebrow mb-3 text-forest/50">Quick reference</div>
+            <div class="space-y-2 font-mono text-xs text-steel">
+              <div class="flex justify-between py-1 border-b border-forest/8">
+                <span class="text-steel/60">1 board foot =</span>
+                <span>144 in³</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-forest/8">
+                <span class="text-steel/60">Air dry rule</span>
+                <span>1 yr / inch</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-forest/8">
+                <span class="text-steel/60">WM3 kerf</span>
+                <span>~0.055"</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-forest/8">
+                <span class="text-steel/60">Green→dry shrink</span>
+                <span>~8% (oak)</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="text-steel/60">Sticker spacing</span>
+                <span>16–24"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Newsletter variant="inline" />
+  <Footer />
+
+</Base>
+
+<script>
+  // ── Tab switching
+  document.querySelectorAll('.calc-tab').forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.calc-tab').forEach(b => {
+        b.classList.remove('border-amber', 'text-amber');
+        b.classList.add('border-transparent', 'text-steel/50');
+      });
+      btn.classList.add('border-amber', 'text-amber');
+      btn.classList.remove('border-transparent', 'text-steel/50');
+      document.querySelectorAll('.calc-panel').forEach(p => p.classList.add('hidden'));
+      const panel = document.getElementById('tab-' + i);
+      if (panel) panel.classList.remove('hidden');
+    });
+  });
+
+  // ── Board feet
+  function calcBoardFeet() {
+    const t = parseFloat((document.getElementById('bf-thickness') as HTMLInputElement).value) || 0;
+    const w = parseFloat((document.getElementById('bf-width') as HTMLInputElement).value) || 0;
+    const l = parseFloat((document.getElementById('bf-length') as HTMLInputElement).value) || 0;
+    const n = parseFloat((document.getElementById('bf-count') as HTMLInputElement).value) || 1;
+    const bf = (t * w * l * n) / 12;
+    const el = document.getElementById('bf-result')!;
+    el.classList.remove('hidden');
+    document.getElementById('bf-output')!.textContent = bf.toFixed(2);
+    document.getElementById('bf-sub')!.textContent = `board feet  ·  ${n} board(s)  ·  ${(bf/n).toFixed(2)} BF each`;
+  }
+  (window as any).calcBoardFeet = calcBoardFeet;
+
+  // ── Drying time
+  function calcDrying() {
+    const rate = parseFloat((document.getElementById('dry-species') as HTMLSelectElement).value);
+    const thick = parseFloat((document.getElementById('dry-thickness') as HTMLInputElement).value) || 1;
+    const method = parseFloat((document.getElementById('dry-method') as HTMLSelectElement).value);
+    const target = parseFloat((document.getElementById('dry-target') as HTMLSelectElement).value);
+    const months = Math.round(rate * thick * method * target);
+    const el = document.getElementById('dry-result')!;
+    el.classList.remove('hidden');
+    const mo = months;
+    document.getElementById('dry-output')!.textContent = mo >= 12
+      ? `${(mo/12).toFixed(1)} years (${mo} months)`
+      : `${mo} months`;
+    const species = (document.getElementById('dry-species') as HTMLSelectElement);
+    document.getElementById('dry-sub')!.textContent =
+      `${species.options[species.selectedIndex].text.split(' (')[0]}  ·  ${thick}" thick  ·  estimated air-dry time`;
+  }
+  (window as any).calcDrying = calcDrying;
+
+  // ── Green weight
+  function calcWeight() {
+    const density = parseFloat((document.getElementById('wt-species') as HTMLSelectElement).value);
+    const bf = parseFloat((document.getElementById('wt-bf') as HTMLInputElement).value) || 0;
+    const ft3 = bf / 12;
+    const lbs = Math.round(ft3 * density);
+    const el = document.getElementById('wt-result')!;
+    el.classList.remove('hidden');
+    document.getElementById('wt-output')!.textContent = `${lbs.toLocaleString()} lbs`;
+    document.getElementById('wt-sub')!.textContent = `≈ ${(lbs/2000).toFixed(2)} tons  ·  ${bf} board feet  ·  green (freshly milled)`;
+  }
+  (window as any).calcWeight = calcWeight;
+
+  // ── Log yield (Doyle scale)
+  function calcYield() {
+    const d = parseFloat((document.getElementById('log-diameter') as HTMLInputElement).value) || 0;
+    const l = parseFloat((document.getElementById('log-length') as HTMLInputElement).value) || 0;
+    const waste = parseFloat((document.getElementById('log-waste') as HTMLSelectElement).value);
+    const doyle = ((d - 4) * (d - 4) * l) / 16;
+    const adjusted = Math.round(doyle * waste);
+    const el = document.getElementById('log-result')!;
+    el.classList.remove('hidden');
+    document.getElementById('log-output')!.textContent = `${adjusted} BF`;
+    document.getElementById('log-sub')!.textContent =
+      `Doyle scale: ${Math.round(doyle)} BF  ·  after waste: ~${adjusted} BF usable`;
+  }
+  (window as any).calcYield = calcYield;
+
+  // ── AI Advisor (calls Cloudflare Worker / Claude API)
+  async function askAdvisor() {
+    const prompt = (document.getElementById('ai-prompt') as HTMLTextAreaElement).value.trim();
+    if (!prompt) return;
+    const btn = document.getElementById('ai-btn')!;
+    const result = document.getElementById('ai-result')!;
+    const output = document.getElementById('ai-output')!;
+    btn.textContent = 'Thinking...';
+    btn.setAttribute('disabled', 'true');
+    result.classList.remove('hidden');
+    output.textContent = '';
+
+    try {
+      // Call your Cloudflare Worker endpoint
+      const res = await fetch('/api/log-advisor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
+      });
+      const data = await res.json();
+      output.textContent = data.advice || 'No response. Try again.';
+    } catch {
+      output.textContent = 'The AI advisor will be available once the API endpoint is connected. Coming soon!';
+    }
+
+    btn.textContent = 'Ask the Advisor';
+    btn.removeAttribute('disabled');
+  }
+  (window as any).askAdvisor = askAdvisor;
+</script>

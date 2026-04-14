@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const perks = [
+  { icon: '🪵', title: 'Monthly live mill sessions', desc: 'Watch and ask questions live as I work through real projects on the WM3.' },
+  { icon: '📐', title: 'Member-only build plans', desc: 'Detailed plans for jigs, fixtures, and equipment mods. Designed and tested at the mill.' },
+  { icon: '🤖', title: 'Full AI log advisor access', desc: 'Unlimited Claude-powered log analysis. Describe your log, get a cut plan.' },
+  { icon: '📊', title: 'Species pricing tracker', desc: 'Real-time regional lumber pricing data so you know what your boards are actually worth.' },
+  { icon: '💬', title: 'Private community forum', desc: 'Ask questions, share your work, get honest feedback from serious sawyers.' },
+  { icon: '🎯', title: 'Early tool access', desc: 'Every new calculator, estimator, and AI tool — members get it first.' },
+];
+---
+
+<Base
+  title="Join The Mill — South Shore Sawyer Community"
+  description="A private community for serious sawyers. Monthly live sessions, member-only plans, AI tools, and a forum full of people who actually work wood."
+>
+  <Nav />
+
+  <main class="pt-24">
+
+    <div class="bg-forest grain relative overflow-hidden">
+      <div class="ring-lines absolute inset-0 opacity-60 pointer-events-none"></div>
+      <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber/60"></div>
+      <div class="relative z-10 max-w-3xl mx-auto px-6 py-24 text-center">
+        <div class="eyebrow text-amber/70 mb-4">Founding member pricing</div>
+        <h1 class="font-display text-5xl md:text-6xl font-black text-cream mb-6">
+          The Mill is open.<br/>
+          <em class="text-amber">Come saw with us.</em>
+        </h1>
+        <p class="text-sawdust/50 text-xl leading-relaxed mb-10">
+          A private community for serious hobbyists, small producers, and anyone who mills their own wood.
+          Monthly live sessions. Member-only tools. Honest conversation.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div class="bg-amber/10 border border-amber/30 px-6 py-4 text-center">
+            <div class="font-display text-4xl font-bold text-amber">$19<span class="text-xl text-sawdust/40">/mo</span></div>
+            <div class="font-mono text-[10px] text-amber/60 tracking-widest uppercase mt-1">Founding member rate</div>
+          </div>
+          <div class="text-sawdust/30 font-mono text-xs">locks in forever<br/>rate goes up after 50 members</div>
+        </div>
+        <a href="https://skool.com" class="btn-primary mt-8 text-base px-8 py-4 inline-flex">
+          Join The Mill
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <p class="mt-4 font-mono text-[10px] text-sawdust/20 tracking-wider">Cancel anytime. No contracts.</p>
+      </div>
+    </div>
+
+    <!-- What's inside -->
+    <div class="max-w-7xl mx-auto px-6 py-24">
+      <div class="text-center mb-16">
+        <div class="eyebrow mb-3">What's included</div>
+        <h2 class="font-display text-4xl font-bold text-forest">Everything inside The Mill</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-forest/10">
+        {perks.map(({ icon, title, desc }) => (
+          <div class="card bg-white p-8">
+            <div class="text-3xl mb-4">{icon}</div>
+            <h3 class="font-display text-lg font-bold text-forest mb-2">{title}</h3>
+            <p class="text-steel text-sm leading-relaxed">{desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Founding member urgency -->
+      <div class="mt-16 bg-amber/10 border border-amber/30 p-10 text-center">
+        <div class="eyebrow text-amber mb-3">Founding member pricing</div>
+        <h3 class="font-display text-3xl font-bold text-forest mb-4">
+          Rate locks in at $19/mo.<br/>Raises to $29 at member 50.
+        </h3>
+        <p class="text-steel max-w-xl mx-auto mb-8">
+          Early members get the best rate, forever. I'm not running a discount — I'm rewarding the people who show up early and help build what this becomes.
+        </p>
+        <a href="https://skool.com" class="btn-primary text-base px-8 py-4 inline-flex">
+          Claim founding member rate
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Base>

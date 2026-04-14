@@ -46,7 +46,7 @@ Site runs at http://localhost:4321
 git init
 git add .
 git commit -m "Initial South Shore Sawyer site"
-git remote add origin https://github.com/YOUR_USERNAME/southshoresawyer
+git remote add origin https://github.com/MrPlympton/southshoresawyer
 git push -u origin main
 ```
 

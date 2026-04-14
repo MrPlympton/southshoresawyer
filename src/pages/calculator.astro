@@ -287,110 +287,107 @@ import Newsletter from '../components/Newsletter.astro';
 
 </Base>
 
-<script>
+<script is:inline>
   // ── Tab switching
-  document.querySelectorAll('.calc-tab').forEach((btn, i) => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.calc-tab').forEach(b => {
+  document.querySelectorAll('.calc-tab').forEach(function(btn, i) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.calc-tab').forEach(function(b) {
         b.classList.remove('border-amber', 'text-amber');
         b.classList.add('border-transparent', 'text-steel/50');
       });
       btn.classList.add('border-amber', 'text-amber');
       btn.classList.remove('border-transparent', 'text-steel/50');
-      document.querySelectorAll('.calc-panel').forEach(p => p.classList.add('hidden'));
-      const panel = document.getElementById('tab-' + i);
+      document.querySelectorAll('.calc-panel').forEach(function(p) {
+        p.classList.add('hidden');
+      });
+      var panel = document.getElementById('tab-' + i);
       if (panel) panel.classList.remove('hidden');
     });
   });
 
   // ── Board feet
   function calcBoardFeet() {
-    const t = parseFloat((document.getElementById('bf-thickness') as HTMLInputElement).value) || 0;
-    const w = parseFloat((document.getElementById('bf-width') as HTMLInputElement).value) || 0;
-    const l = parseFloat((document.getElementById('bf-length') as HTMLInputElement).value) || 0;
-    const n = parseFloat((document.getElementById('bf-count') as HTMLInputElement).value) || 1;
-    const bf = (t * w * l * n) / 12;
-    const el = document.getElementById('bf-result')!;
+    var t = parseFloat(document.getElementById('bf-thickness').value) || 0;
+    var w = parseFloat(document.getElementById('bf-width').value) || 0;
+    var l = parseFloat(document.getElementById('bf-length').value) || 0;
+    var n = parseFloat(document.getElementById('bf-count').value) || 1;
+    var bf = (t * w * l * n) / 12;
+    var el = document.getElementById('bf-result');
     el.classList.remove('hidden');
-    document.getElementById('bf-output')!.textContent = bf.toFixed(2);
-    document.getElementById('bf-sub')!.textContent = `board feet  ·  ${n} board(s)  ·  ${(bf/n).toFixed(2)} BF each`;
+    document.getElementById('bf-output').textContent = bf.toFixed(2);
+    document.getElementById('bf-sub').textContent = 'board feet  ·  ' + n + ' board(s)  ·  ' + (bf / n).toFixed(2) + ' BF each';
   }
-  (window as any).calcBoardFeet = calcBoardFeet;
+  window.calcBoardFeet = calcBoardFeet;
 
   // ── Drying time
   function calcDrying() {
-    const rate = parseFloat((document.getElementById('dry-species') as HTMLSelectElement).value);
-    const thick = parseFloat((document.getElementById('dry-thickness') as HTMLInputElement).value) || 1;
-    const method = parseFloat((document.getElementById('dry-method') as HTMLSelectElement).value);
-    const target = parseFloat((document.getElementById('dry-target') as HTMLSelectElement).value);
-    const months = Math.round(rate * thick * method * target);
-    const el = document.getElementById('dry-result')!;
+    var speciesEl = document.getElementById('dry-species');
+    var rate = parseFloat(speciesEl.value);
+    var thick = parseFloat(document.getElementById('dry-thickness').value) || 1;
+    var method = parseFloat(document.getElementById('dry-method').value);
+    var target = parseFloat(document.getElementById('dry-target').value);
+    var months = Math.round(rate * thick * method * target);
+    var el = document.getElementById('dry-result');
     el.classList.remove('hidden');
-    const mo = months;
-    document.getElementById('dry-output')!.textContent = mo >= 12
-      ? `${(mo/12).toFixed(1)} years (${mo} months)`
-      : `${mo} months`;
-    const species = (document.getElementById('dry-species') as HTMLSelectElement);
-    document.getElementById('dry-sub')!.textContent =
-      `${species.options[species.selectedIndex].text.split(' (')[0]}  ·  ${thick}" thick  ·  estimated air-dry time`;
+    document.getElementById('dry-output').textContent = months >= 12
+      ? (months / 12).toFixed(1) + ' years (' + months + ' months)'
+      : months + ' months';
+    var speciesName = speciesEl.options[speciesEl.selectedIndex].text.split(' (')[0];
+    document.getElementById('dry-sub').textContent = speciesName + '  ·  ' + thick + '" thick  ·  estimated air-dry time';
   }
-  (window as any).calcDrying = calcDrying;
+  window.calcDrying = calcDrying;
 
   // ── Green weight
   function calcWeight() {
-    const density = parseFloat((document.getElementById('wt-species') as HTMLSelectElement).value);
-    const bf = parseFloat((document.getElementById('wt-bf') as HTMLInputElement).value) || 0;
-    const ft3 = bf / 12;
-    const lbs = Math.round(ft3 * density);
-    const el = document.getElementById('wt-result')!;
+    var density = parseFloat(document.getElementById('wt-species').value);
+    var bf = parseFloat(document.getElementById('wt-bf').value) || 0;
+    var ft3 = bf / 12;
+    var lbs = Math.round(ft3 * density);
+    var el = document.getElementById('wt-result');
     el.classList.remove('hidden');
-    document.getElementById('wt-output')!.textContent = `${lbs.toLocaleString()} lbs`;
-    document.getElementById('wt-sub')!.textContent = `≈ ${(lbs/2000).toFixed(2)} tons  ·  ${bf} board feet  ·  green (freshly milled)`;
+    document.getElementById('wt-output').textContent = lbs.toLocaleString() + ' lbs';
+    document.getElementById('wt-sub').textContent = '≈ ' + (lbs / 2000).toFixed(2) + ' tons  ·  ' + bf + ' board feet  ·  green (freshly milled)';
   }
-  (window as any).calcWeight = calcWeight;
+  window.calcWeight = calcWeight;
 
   // ── Log yield (Doyle scale)
   function calcYield() {
-    const d = parseFloat((document.getElementById('log-diameter') as HTMLInputElement).value) || 0;
-    const l = parseFloat((document.getElementById('log-length') as HTMLInputElement).value) || 0;
-    const waste = parseFloat((document.getElementById('log-waste') as HTMLSelectElement).value);
-    const doyle = ((d - 4) * (d - 4) * l) / 16;
-    const adjusted = Math.round(doyle * waste);
-    const el = document.getElementById('log-result')!;
+    var d = parseFloat(document.getElementById('log-diameter').value) || 0;
+    var l = parseFloat(document.getElementById('log-length').value) || 0;
+    var waste = parseFloat(document.getElementById('log-waste').value);
+    var doyle = ((d - 4) * (d - 4) * l) / 16;
+    var adjusted = Math.round(doyle * waste);
+    var el = document.getElementById('log-result');
     el.classList.remove('hidden');
-    document.getElementById('log-output')!.textContent = `${adjusted} BF`;
-    document.getElementById('log-sub')!.textContent =
-      `Doyle scale: ${Math.round(doyle)} BF  ·  after waste: ~${adjusted} BF usable`;
+    document.getElementById('log-output').textContent = adjusted + ' BF';
+    document.getElementById('log-sub').textContent = 'Doyle scale: ' + Math.round(doyle) + ' BF  ·  after waste: ~' + adjusted + ' BF usable';
   }
-  (window as any).calcYield = calcYield;
+  window.calcYield = calcYield;
 
-  // ── AI Advisor (calls Cloudflare Worker / Claude API)
+  // ── AI Advisor
   async function askAdvisor() {
-    const prompt = (document.getElementById('ai-prompt') as HTMLTextAreaElement).value.trim();
+    var prompt = document.getElementById('ai-prompt').value.trim();
     if (!prompt) return;
-    const btn = document.getElementById('ai-btn')!;
-    const result = document.getElementById('ai-result')!;
-    const output = document.getElementById('ai-output')!;
+    var btn = document.getElementById('ai-btn');
+    var result = document.getElementById('ai-result');
+    var output = document.getElementById('ai-output');
     btn.textContent = 'Thinking...';
-    btn.setAttribute('disabled', 'true');
+    btn.disabled = true;
     result.classList.remove('hidden');
     output.textContent = '';
-
     try {
-      // Call your Cloudflare Worker endpoint
-      const res = await fetch('/api/log-advisor', {
+      var res = await fetch('/api/log-advisor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt: prompt }),
       });
-      const data = await res.json();
+      var data = await res.json();
       output.textContent = data.advice || 'No response. Try again.';
-    } catch {
-      output.textContent = 'The AI advisor will be available once the API endpoint is connected. Coming soon!';
+    } catch (e) {
+      output.textContent = 'The AI advisor will be live once the Cloudflare Worker is connected. Coming soon!';
     }
-
     btn.textContent = 'Ask the Advisor';
-    btn.removeAttribute('disabled');
+    btn.disabled = false;
   }
-  (window as any).askAdvisor = askAdvisor;
+  window.askAdvisor = askAdvisor;
 </script>

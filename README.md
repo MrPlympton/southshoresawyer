@@ -86,7 +86,7 @@ wrangler deploy log-advisor.js --name log-advisor
 ### 3. Add your Anthropic API key
 
 ```bash
-wrangler secret put ANTHROPIC_API_KEY
+wrangler secret put ANTHROPIC_API_KEY --name log-advisor
 # Paste your key when prompted
 ```
 

@@ -67,13 +67,16 @@ const { variant = 'section' } = Astro.props;
 )}
 
 <script>
-  function handleSubscribe(e: Event) {
+  async function handleSubscribe(e: Event) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
+    const email = new FormData(form).get('email') as string;
     const success = document.getElementById('form-success');
-    // TODO: Wire to ConvertKit API endpoint
-    // const email = new FormData(form).get('email');
-    // fetch('/api/subscribe', { method: 'POST', body: JSON.stringify({ email }) });
+    const res = await fetch(`https://api.convertkit.com/v3/forms/208510dfba/subscribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ api_key: 'dJP3zjlV1dsC-bDsxvWDWQ', email }),
+    });
     form.style.display = 'none';
     if (success) success.classList.remove('hidden');
   }

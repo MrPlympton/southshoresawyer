@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "milling-white-oak-wm3",
+    "title": "Milling White Oak on a Bandsaw Mill",
+    "excerpt": "By SouthShoreSawyer.com\n\nIf you spend enough time behind a bandsaw mill on the South Shore, you’ll learn pretty quickly that not all hardwoods are created equal. White oak is one of those species that commands respect. It’s dense, it’s stubborn, and if you don’t pay attention, it’ll humble you fast. But when you mill it right, there’s nothing better—strong, beautiful lumber that holds up for generations.\n\nThis isn’t theory. This is what I’ve learned after years of wrestling white oak logs onto the mill and figuring out what works—and what doesn’t.\n\nReading the Log Before You Ever Start the Saw\n\n\n\n\n\n\n7\nThe biggest mistake I see is people rushing into the first cut.\n\nWith white oak, you need to look at the end grain first. Those medullary rays—those little shiny lines running across the growth rings—tell you everything about how that log wants to be sawn.\n\nIf you ignore them, you’ll still get boards. But if you read them right, you can get great boards.\n\nFlat Sawn vs Quarter Sawn: Choose Your Outcome\nMost of the time, flat sawing is the fastest way to break down a log. You’ll get wide boards with that classic cathedral grain, and your yield will be higher.\n\nBut white oak really shines when you quarter saw it.\n\n\n\n\n\n\n\n7\nQuarter sawn white oak gives you that ray fleck—that shimmering pattern you see in high-end furniture and cabinetry. It’s also a lot more stable. Less cupping, less movement.\n\nThe tradeoff?\nMore time. More handling. Less overall yield.\n\nAround here, if I’ve got a good clean log, I’ll usually take the extra time and quarter it. It pays off later.\n\nMoisture Content: Don’t Let the Log Get Ahead of You\nFresh white oak is heavy—and wet. You’re usually looking at 60–80% moisture content when it’s green.\n\nHere’s the thing: white oak doesn’t like to dry fast.\n\nLet a log sit too long → it’ll start checking on the ends\n\nDry boards too fast → you’ll get cracks, splits, even internal damage\n\nWhat I do:\n\nMill it as soon as I can\n\nSeal the ends right away\n\nStack it properly and let it air dry slow\n\nWhite oak takes patience. There’s no shortcut here.\n\nBlade Setup: This Is Where It All Goes Wrong (or Right)\nIf your mill isn’t dialed in, white oak will let you know immediately.\n\nBlade matters:\nStick with a solid hardwood profile (around 7°–10° hook)\n\nKeep it sharp—dull blades don’t “kind of work” on oak, they fail\n\nTension matters even more:\nToo loose → you’ll get wavy cuts\n\nToo tight → you risk snapping a blade\n\nWhen a cut starts wandering, I don’t guess. I check tension first.\n\nFeed Rate: Slow Down\nYou can push pine. You can’t push white oak.\n\nIf you try, you’ll hear it:\n\nEngine bogs down\n\nBlade heats up\n\nCut quality drops fast\n\nThe trick is to let the blade do the work.\n\nWatch the sawdust:\n\nFine powder = dull blade or too much pressure\n\nNice chips = you’re in the right zone\n\nThat’s one of those small things that tells you a lot.\n\nHeat and Friction: The Silent Problems\nWhite oak builds heat quickly, especially on longer cuts.\n\nTo keep things running clean:\n\nUse water and a little soap or a proper blade lube\n\nKeep your guides aligned\n\nStay on top of blade maintenance\n\nYou’ll go through blades faster with oak. That’s just part of the deal.\n\nDealing with Stress in the Log\nWhite oak can hold internal tension, and it’ll release it when you start cutting.\n\nYou might notice:\n\nThe kerf closing behind the blade\n\nBoards pinching\n\nSlight movement after a pass\n\nThat’s when wedges come in. Don’t wait—get them in early and keep the cut open.\n\nCutting for Stability, Not Just Speed\nWhite oak moves as it dries—especially flat sawn boards.\n\nA few things I always keep in mind:\n\nTangential shrinkage is higher than radial\n\nQuarter sawn boards stay flatter\n\nAlways mill a little oversized\n\nIf I’m aiming for a 1\" finished board, I’m cutting closer to 1-1/8\" green to give myself room after drying and planing.\n\nFinal Thoughts from the South Shore\nWhite oak isn’t the easiest wood to mill, but that’s exactly why it’s worth doing.\n\nIf you take your time, pay attention to the grain, and keep your mill tuned, you’ll end up with lumber that people will fight over—whether it’s for flooring, furniture, or a custom project.\n\nAt the end of the day, milling white oak comes down to a few simple things:\n\nRead the log\n\nKeep your blade sharp and properly tensioned\n\nDon’t rush the cut\n\nThink ahead to drying\n\nDo that, and the wood will take care of the rest.",
+    "date": "April 8, 2025",
+    "category": "Field Notes",
+    "readTime": "8 min",
+    "featured": true
+  },
+  {
+    "slug": "air-drying-stacking-guide",
+    "title": "The Only Stacking Guide You Need for Air Drying Lumber (Revised)",
+    "excerpt": "Bad sticker placement. Insufficient airflow. Skipping the end sealer. These are the three mistakes that ruin more air-dried lumber than anything else.",
+    "date": "March 28, 2025",
+    "category": "Drying & Curing",
+    "readTime": "6 min",
+    "featured": false
+  },
+  {
+    "slug": "woodland-mills-wm3-blade-guide",
+    "title": "WM3 Blade Selection: The Definitive Breakdown",
+    "excerpt": "After running through a dozen blade types across hardwoods and softwoods, I've landed on two go-to blades and one niche choice for figured wood.",
+    "date": "March 15, 2025",
+    "category": "Equipment",
+    "readTime": "10 min",
+    "featured": false
+  },
+  {
+    "slug": "3d-printed-log-dogs",
+    "title": "3D Printed Log Dogs That Actually Hold",
+    "excerpt": "Commercial log dogs are expensive and often the wrong geometry for small-diameter logs. I designed a set in Fusion 360, printed them in PETG, and they've held up for 200+ cuts.",
+    "date": "March 2, 2025",
+    "category": "DIY & Builds",
+    "readTime": "7 min",
+    "featured": false
+  },
+  {
+    "slug": "south-shore-species-guide",
+    "title": "What Grows on the South Shore: A Sawyer's Field Guide",
+    "excerpt": "Plymouth County is dense with white pine, red oak, and white oak. Less commonly: black cherry, ash (before the EAB), and the occasional butternut. Here's what to look for.",
+    "date": "Feb 18, 2025",
+    "category": "Species",
+    "readTime": "12 min",
+    "featured": false
+  }
+]

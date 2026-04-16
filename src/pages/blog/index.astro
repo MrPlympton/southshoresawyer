@@ -3,6 +3,9 @@ import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import Newsletter from '../../components/Newsletter.astro';
+import postsData from '../../data/posts.json';
+
+const posts = postsData;
 
 const categories = ['All', 'Field Notes', 'Species', 'Equipment', 'Drying & Curing', 'DIY & Builds'];
 ---
@@ -33,133 +36,83 @@ const categories = ['All', 'Field Notes', 'Species', 'Equipment', 'Drying & Curi
       <!-- Category filter -->
       <div class="flex flex-wrap gap-2 mb-12">
         {categories.map((cat, i) => (
-          <button
-            class={`cat-btn font-mono text-[10px] tracking-widest uppercase px-4 py-2 border transition-colors
-              ${i === 0 ? 'bg-forest text-amber border-forest' : 'bg-transparent text-steel/50 border-forest/20 hover:border-forest/50 hover:text-forest'}`}
-            data-cat={cat}
-          >
+          <button class={`font-mono text-[10px] tracking-widest uppercase px-4 py-2 border transition-colors
+            ${i === 0 ? 'bg-forest text-amber border-forest' : 'bg-transparent text-steel/50 border-forest/20 hover:border-forest/50 hover:text-forest'}`}>
             {cat}
           </button>
         ))}
       </div>
 
-      <!-- Loading -->
-      <div id="posts-loading" class="text-center py-20">
-        <div class="font-mono text-sm text-steel/40">Loading field notes...</div>
-      </div>
-
-      <!-- Empty -->
-      <div id="posts-empty" class="hidden text-center py-20">
-        <div class="font-display text-2xl text-forest mb-3">No posts yet</div>
-        <p class="text-steel font-mono text-sm">Field notes are coming soon. Subscribe below to be notified.</p>
-      </div>
-
       <!-- Featured post -->
-      <div id="featured-container" class="hidden mb-12"></div>
+      {posts.filter(p => p.featured).map(post => (
+        <div class="mb-12 grid grid-cols-1 lg:grid-cols-5 gap-0 border border-forest/10 group">
+          <div class="lg:col-span-3 bg-bark/5 min-h-48 flex items-center justify-center border-r border-forest/10">
+            <div class="text-center p-12">
+              <div class="font-mono text-xs text-amber/40 tracking-widest uppercase mb-2">Featured</div>
+              <svg class="mx-auto opacity-10" width="80" height="80" viewBox="0 0 80 80" fill="none">
+                <circle cx="40" cy="40" r="36" stroke="#1C2E1C" stroke-width="3"/>
+                <circle cx="40" cy="40" r="20" stroke="#1C2E1C" stroke-width="2"/>
+                <circle cx="40" cy="40" r="6" fill="#C8881A"/>
+                <line x1="40" y1="4" x2="40" y2="14" stroke="#C8881A" stroke-width="3" stroke-linecap="round"/>
+                <line x1="40" y1="66" x2="40" y2="76" stroke="#C8881A" stroke-width="3" stroke-linecap="round"/>
+                <line x1="4" y1="40" x2="14" y2="40" stroke="#C8881A" stroke-width="3" stroke-linecap="round"/>
+                <line x1="66" y1="40" x2="76" y2="40" stroke="#C8881A" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="lg:col-span-2 p-8 flex flex-col justify-between">
+            <div>
+              <div class="flex gap-3 mb-4">
+                <span class="eyebrow text-amber">{post.category}</span>
+                <span class="font-mono text-[10px] text-steel/40">{post.readTime} read</span>
+              </div>
+              <h2 class="font-display text-2xl font-bold text-forest mb-4 group-hover:text-bark transition-colors">
+                {post.title}
+              </h2>
+              <p class="text-steel text-sm leading-relaxed mb-6">{post.excerpt}</p>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[10px] text-steel/40">{post.date}</span>
+              <a href={`/blog/${post.slug}`} class="eyebrow text-amber hover:text-amber-light transition-colors">
+                Read field notes →
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
 
-      <!-- Grid -->
-      <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
+      <!-- Post grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.filter(p => !p.featured).map(post => (
+          <article class="card bg-white group flex flex-col">
+            <div class="bg-sawdust/60 h-40 flex items-center justify-center border-b border-forest/8">
+              <svg class="opacity-10" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <circle cx="24" cy="24" r="20" stroke="#1C2E1C" stroke-width="2"/>
+                <circle cx="24" cy="24" r="4" fill="#C8881A"/>
+              </svg>
+            </div>
+            <div class="p-6 flex flex-col flex-1">
+              <div class="flex gap-3 mb-3">
+                <span class="eyebrow text-amber text-[9px]">{post.category}</span>
+                <span class="font-mono text-[9px] text-steel/40">{post.readTime}</span>
+              </div>
+              <h3 class="font-display text-lg font-bold text-forest mb-3 group-hover:text-bark transition-colors leading-tight">
+                {post.title}
+              </h3>
+              <p class="text-steel text-sm leading-relaxed mb-6 flex-1">{post.excerpt}</p>
+              <div class="flex items-center justify-between mt-auto">
+                <span class="font-mono text-[9px] text-steel/40">{post.date}</span>
+                <a href={`/blog/${post.slug}`} class="eyebrow text-amber text-[9px] hover:text-amber-light transition-colors">
+                  Read →
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   </main>
 
   <Newsletter variant="section" />
   <Footer />
-
 </Base>
-
-<script is:inline>
-  var allPosts = [];
-  var activeCategory = 'All';
-
-  async function loadPosts() {
-    try {
-      var res = await fetch('/api/blog/posts');
-      if (!res.ok) throw new Error('API error');
-      allPosts = await res.json();
-      renderPosts(allPosts);
-    } catch (e) {
-      document.getElementById('posts-loading').innerHTML =
-        '<div class="font-mono text-sm text-steel/40">Could not load posts. Check back soon.</div>';
-    }
-  }
-
-  function esc(str) {
-    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function renderPosts(posts) {
-    document.getElementById('posts-loading').style.display = 'none';
-    var filtered = activeCategory === 'All' ? posts : posts.filter(function(p){ return p.category === activeCategory; });
-
-    if (!filtered.length) {
-      document.getElementById('posts-empty').classList.remove('hidden');
-      document.getElementById('featured-container').classList.add('hidden');
-      document.getElementById('posts-grid').innerHTML = '';
-      return;
-    }
-    document.getElementById('posts-empty').classList.add('hidden');
-
-    var featured = filtered.find(function(p){ return p.featured; });
-    var rest = filtered.filter(function(p){ return p !== featured; });
-
-    var featuredEl = document.getElementById('featured-container');
-    if (featured) {
-      featuredEl.classList.remove('hidden');
-      featuredEl.innerHTML =
-        '<div class="grid grid-cols-1 lg:grid-cols-5 gap-0 border border-forest/10 group">' +
-          '<div class="lg:col-span-3 bg-bark/5 min-h-48 flex items-center justify-center border-r border-forest/10">' +
-            '<div class="text-center p-12">' +
-              '<div class="font-mono text-xs text-amber/40 tracking-widest uppercase mb-2">Featured</div>' +
-              '<svg class="mx-auto opacity-10" width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="36" stroke="#1C2E1C" stroke-width="3"/><circle cx="40" cy="40" r="20" stroke="#1C2E1C" stroke-width="2"/><circle cx="40" cy="40" r="6" fill="#C8881A"/></svg>' +
-            '</div>' +
-          '</div>' +
-          '<div class="lg:col-span-2 p-8 flex flex-col justify-between">' +
-            '<div>' +
-              '<div class="flex gap-3 mb-4"><span class="eyebrow text-amber">' + esc(featured.category) + '</span><span class="font-mono text-[10px] text-steel/40">' + esc(featured.readTime) + ' read</span></div>' +
-              '<h2 class="font-display text-2xl font-bold text-forest mb-4">' + esc(featured.title) + '</h2>' +
-              '<p class="text-steel text-sm leading-relaxed mb-6">' + esc(featured.excerpt) + '</p>' +
-            '</div>' +
-            '<div class="flex items-center justify-between">' +
-              '<span class="font-mono text-[10px] text-steel/40">' + esc(featured.date) + '</span>' +
-              '<a href="/blog/' + featured.slug + '" class="eyebrow text-amber hover:text-amber-light transition-colors">Read field notes →</a>' +
-            '</div>' +
-          '</div>' +
-        '</div>';
-    } else {
-      featuredEl.classList.add('hidden');
-    }
-
-    document.getElementById('posts-grid').innerHTML = rest.map(function(post) {
-      return '<article class="card bg-white group flex flex-col">' +
-        '<div class="bg-sawdust/60 h-40 flex items-center justify-center border-b border-forest/8">' +
-          '<svg class="opacity-10" width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="#1C2E1C" stroke-width="2"/><circle cx="24" cy="24" r="4" fill="#C8881A"/></svg>' +
-        '</div>' +
-        '<div class="p-6 flex flex-col flex-1">' +
-          '<div class="flex gap-3 mb-3"><span class="eyebrow text-amber text-[9px]">' + esc(post.category) + '</span><span class="font-mono text-[9px] text-steel/40">' + esc(post.readTime) + '</span></div>' +
-          '<h3 class="font-display text-lg font-bold text-forest mb-3 group-hover:text-bark transition-colors leading-tight">' + esc(post.title) + '</h3>' +
-          '<p class="text-steel text-sm leading-relaxed mb-6 flex-1">' + esc(post.excerpt) + '</p>' +
-          '<div class="flex items-center justify-between mt-auto">' +
-            '<span class="font-mono text-[9px] text-steel/40">' + esc(post.date) + '</span>' +
-            '<a href="/blog/' + post.slug + '" class="eyebrow text-amber text-[9px] hover:text-amber-light transition-colors">Read →</a>' +
-          '</div>' +
-        '</div>' +
-      '</article>';
-    }).join('');
-  }
-
-  document.querySelectorAll('.cat-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      activeCategory = btn.dataset.cat;
-      document.querySelectorAll('.cat-btn').forEach(function(b) {
-        b.classList.remove('bg-forest','text-amber','border-forest');
-        b.classList.add('bg-transparent','text-steel/50','border-forest/20');
-      });
-      btn.classList.add('bg-forest','text-amber','border-forest');
-      btn.classList.remove('bg-transparent','text-steel/50','border-forest/20');
-      renderPosts(allPosts);
-    });
-  });
-
-  loadPosts();
-</script>

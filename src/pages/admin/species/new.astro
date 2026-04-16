@@ -1,0 +1,89 @@
+---
+export const prerender = false;
+import Admin from '../../../layouts/Admin.astro';
+---
+
+<Admin title="New Species" section="species">
+  <div class="max-w-2xl">
+    <a href="/admin/species" class="font-mono text-[10px] text-steel/40 hover:text-amber transition-colors mb-6 inline-block">
+      ← Back to species
+    </a>
+
+    <div class="bg-white border border-forest/10 p-8">
+      <form id="species-form" class="space-y-5">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Common Name *</label>
+            <input name="name" type="text" required placeholder="White Oak"
+                   class="w-full border border-forest/15 font-display text-base text-forest px-4 py-3 focus:outline-none focus:border-amber transition-colors" />
+          </div>
+          <div>
+            <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Latin Name</label>
+            <input name="latin" type="text" placeholder="Quercus alba"
+                   class="w-full border border-forest/15 font-mono text-sm text-steel italic px-4 py-3 focus:outline-none focus:border-amber transition-colors" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Rating (1–5)</label>
+            <input name="rating" type="number" min="1" max="5" value="3"
+                   class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors" />
+          </div>
+          <div>
+            <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Drying Time</label>
+            <input name="drying" type="text" placeholder="Medium (6 mo/in)"
+                   class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors" />
+          </div>
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Best Uses</label>
+          <input name="use" type="text" placeholder="Furniture, flooring, barrels"
+                 class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors" />
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Milling Notes</label>
+          <textarea name="notes" rows={4}
+                    class="w-full border border-forest/15 font-sans text-sm text-steel px-4 py-3 focus:outline-none focus:border-amber transition-colors resize-none"
+                    placeholder="What I've learned from milling this species on the WM3..."></textarea>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <input type="checkbox" name="available" id="available" class="w-4 h-4 accent-amber" checked />
+          <label for="available" class="font-mono text-xs text-steel/60">Available locally on the South Shore</label>
+        </div>
+
+        <div class="pt-4 flex gap-3">
+          <button type="submit" class="btn-primary">Save Species</button>
+          <a href="/admin/species" class="btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</Admin>
+
+<script>
+  document.getElementById('species-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form));
+    const sp = {
+      name: data.name,
+      latin: data.latin || '',
+      rating: Number(data.rating),
+      drying: data.drying || '',
+      use: data.use || '',
+      notes: data.notes || '',
+      available: 'available' in data,
+    };
+    const res = await fetch('/api/species', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sp),
+    });
+    if (res.ok) window.location.href = '/admin/species';
+    else alert('Failed to save species');
+  });
+</script>

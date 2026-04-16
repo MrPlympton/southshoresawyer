@@ -1,0 +1,92 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  section?: string;
+}
+
+const { title, section = '' } = Astro.props;
+
+const navItems = [
+  { href: '/admin', label: 'Dashboard', icon: '▦', key: 'dashboard' },
+  { href: '/admin/blog', label: 'Field Notes', icon: '✎', key: 'blog' },
+  { href: '/admin/species', label: 'Species', icon: '◉', key: 'species' },
+];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} — SSS Admin</title>
+</head>
+<body class="bg-sawdust min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside class="w-56 bg-forest min-h-screen flex flex-col flex-shrink-0">
+    <!-- Logo -->
+    <div class="px-5 py-5 border-b border-cream/10">
+      <a href="/" class="flex items-center gap-2 group">
+        <div class="w-7 h-7 bg-amber flex items-center justify-center flex-shrink-0">
+          <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
+            <circle cx="9" cy="9" r="7" stroke="#1C2E1C" stroke-width="1.5" fill="none"/>
+            <circle cx="9" cy="9" r="2.5" fill="#1C2E1C"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-display font-bold text-cream text-xs leading-tight">South Shore</div>
+          <div class="font-display font-bold text-amber text-xs leading-tight">Sawyer</div>
+        </div>
+      </a>
+      <div class="font-mono text-[9px] text-cream/30 tracking-widest uppercase mt-2">Admin Panel</div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 px-3 py-4 space-y-1">
+      {navItems.map(item => (
+        <a
+          href={item.href}
+          class={`flex items-center gap-3 px-3 py-2.5 font-mono text-xs tracking-wide transition-colors rounded-sm
+            ${section === item.key
+              ? 'bg-amber text-bark font-bold'
+              : 'text-sawdust/60 hover:text-cream hover:bg-cream/5'
+            }`}
+        >
+          <span class="text-base leading-none">{item.icon}</span>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Bottom: view site + logout -->
+    <div class="px-3 py-4 border-t border-cream/10 space-y-1">
+      <a href="/" target="_blank"
+         class="flex items-center gap-3 px-3 py-2 font-mono text-xs text-sawdust/40 hover:text-cream transition-colors">
+        <span>↗</span> View Site
+      </a>
+      <form method="POST" action="/api/auth/logout">
+        <button type="submit"
+                class="flex items-center gap-3 px-3 py-2 font-mono text-xs text-sawdust/40 hover:text-red-400 transition-colors w-full text-left">
+          <span>⏻</span> Log Out
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col min-h-screen">
+    <!-- Top bar -->
+    <header class="bg-white border-b border-forest/10 px-8 py-4 flex items-center justify-between">
+      <h1 class="font-display font-bold text-forest text-lg">{title}</h1>
+      <div class="font-mono text-[10px] text-steel/40 tracking-wider">Logged in as admin</div>
+    </header>
+
+    <!-- Content -->
+    <div class="flex-1 p-8">
+      <slot />
+    </div>
+  </main>
+
+</body>
+</html>

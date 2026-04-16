@@ -3,17 +3,9 @@ import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Newsletter from '../components/Newsletter.astro';
+import speciesData from '../data/species.json';
 
-const species = [
-  { name: 'White Oak', latin: 'Quercus alba', rating: 5, drying: 'Slow (12 mo/in)', use: 'Furniture, flooring, barrels', notes: 'The workhorse of the South Shore. Beautiful ray flecks when quartersawn. Patience required for drying.', available: true },
-  { name: 'Red Oak',   latin: 'Quercus rubra', rating: 4, drying: 'Medium (8 mo/in)', use: 'Cabinets, furniture, flooring', notes: 'More porous than white oak — not suitable for outdoor use without treatment. Machines beautifully.', available: true },
-  { name: 'White Pine', latin: 'Pinus strobus', rating: 4, drying: 'Fast (3 mo/in)', use: 'Construction, shiplap, paneling', notes: 'Grows everywhere on the South Shore. Soft and easy to mill. Watch for pitch pockets near knots.', available: true },
-  { name: 'Black Cherry', latin: 'Prunus serotina', rating: 5, drying: 'Medium (5 mo/in)', use: 'Fine furniture, cabinets, turning', notes: 'Darkens beautifully with light exposure. One of the finest American hardwoods. Worth every minute of patience.', available: true },
-  { name: 'Hard Maple', latin: 'Acer saccharum', rating: 4, drying: 'Medium (6 mo/in)', use: 'Floors, countertops, butcher block', notes: 'Dense and demanding on blades. Keep them sharp. Curly and bird\'s eye patterns add significant value.', available: true },
-  { name: 'Black Walnut', latin: 'Juglans nigra', rating: 5, drying: 'Medium (4 mo/in)', use: 'Premium furniture, gunstocks, turning', notes: 'The most valuable common North American hardwood. Rarer on the South Shore but worth seeking out.', available: true },
-  { name: 'Eastern Red Cedar', latin: 'Juniperus virginiana', rating: 3, drying: 'Fast (3 mo/in)', use: 'Closet liners, chests, outdoor projects', notes: 'Aromatic and naturally rot-resistant. Mills beautifully but dulls blades faster than you\'d expect.', available: true },
-  { name: 'White Ash', latin: 'Fraxinus americana', rating: 3, drying: 'Medium (4 mo/in)', use: 'Tool handles, flooring, sporting goods', notes: 'Mostly killed by Emerald Ash Borer on the South Shore. Mill what\'s standing dead — it\'s still usable timber.', available: false },
-];
+const species = speciesData;
 ---
 
 <Base

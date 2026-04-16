@@ -1,194 +1,104 @@
 ---
-// This page renders client-side only — no server auth here,
-// credentials are validated by the Cloudflare Worker API.
+export const prerender = false;
+import Admin from '../../layouts/Admin.astro';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+const posts = JSON.parse(readFileSync(resolve('src/data/posts.json'), 'utf-8'));
+const species = JSON.parse(readFileSync(resolve('src/data/species.json'), 'utf-8'));
 ---
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Login — South Shore Sawyer</title>
-  <meta name="robots" content="noindex, nofollow" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: 'IBM Plex Mono', monospace;
-      background: #1C2E1C;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      background-image: repeating-linear-gradient(
-        180deg,
-        transparent 0px, transparent 28px,
-        rgba(200,136,26,0.04) 28px, rgba(200,136,26,0.04) 29px
-      );
-    }
+<Admin title="Dashboard" section="dashboard">
+  <!-- Stats row -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    {[
+      { label: 'Blog Posts', value: posts.length, href: '/admin/blog', color: 'border-amber' },
+      { label: 'Species', value: species.length, href: '/admin/species', color: 'border-forest' },
+      { label: 'Featured', value: posts.filter((p: any) => p.featured).length, href: '/admin/blog', color: 'border-amber/50' },
+      { label: 'Unavailable', value: species.filter((s: any) => !s.available).length, href: '/admin/species', color: 'border-red-300' },
+    ].map(stat => (
+      <a href={stat.href}
+         class={`bg-white border-t-2 ${stat.color} p-5 hover:shadow-md transition-shadow`}>
+        <div class="font-display font-bold text-3xl text-forest">{stat.value}</div>
+        <div class="font-mono text-[10px] text-steel/50 tracking-widest uppercase mt-1">{stat.label}</div>
+      </a>
+    ))}
+  </div>
 
-    .card {
-      background: #FAF6EE;
-      width: 100%;
-      max-width: 400px;
-      border-top: 4px solid #C8881A;
-      padding: 2.5rem;
-    }
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-    .logo-wrap {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 2rem;
-    }
-
-    .logo-icon {
-      width: 36px; height: 36px;
-      background: #1C2E1C;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .logo-text { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #1C2E1C; line-height: 1.2; }
-    .logo-sub  { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #C8881A; margin-top: 2px; }
-
-    h1 { font-family: 'Playfair Display', serif; font-size: 24px; color: #1C2E1C; margin-bottom: 6px; }
-    .subtitle { font-size: 11px; color: #718096; letter-spacing: 0.05em; margin-bottom: 2rem; }
-
-    label { display: block; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #4A5568; margin-bottom: 6px; }
-
-    input[type="password"] {
-      width: 100%;
-      border: 1px solid rgba(28,46,28,0.2);
-      background: #F7F0E4;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 16px;
-      color: #1C2E1C;
-      padding: 12px 16px;
-      outline: none;
-      transition: border-color 0.15s;
-      margin-bottom: 1.5rem;
-      letter-spacing: 0.1em;
-    }
-    input[type="password"]:focus { border-color: #C8881A; }
-
-    .btn {
-      width: 100%;
-      background: #1C2E1C;
-      color: #C8881A;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 14px;
-      border: none;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .btn:hover { background: #3D2410; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .error {
-      display: none;
-      background: #FCEBEB;
-      border: 1px solid #F09595;
-      color: #A32D2D;
-      font-size: 11px;
-      padding: 10px 14px;
-      margin-top: 12px;
-      letter-spacing: 0.03em;
-    }
-
-    .back {
-      display: block;
-      text-align: center;
-      margin-top: 1.5rem;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #718096;
-      text-decoration: none;
-    }
-    .back:hover { color: #1C2E1C; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <div class="logo-wrap">
-      <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <circle cx="9" cy="9" r="7" stroke="#C8881A" stroke-width="1.5" fill="none"/>
-          <circle cx="9" cy="9" r="2.5" fill="#C8881A"/>
-          <line x1="9" y1="2" x2="9" y2="4" stroke="#C8881A" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="9" y1="14" x2="9" y2="16" stroke="#C8881A" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="2" y1="9" x2="4" y2="9" stroke="#C8881A" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="14" y1="9" x2="16" y2="9" stroke="#C8881A" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+    <!-- Recent posts -->
+    <div class="bg-white border border-forest/10">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-forest/10">
+        <h2 class="font-display font-bold text-forest">Recent Posts</h2>
+        <a href="/admin/blog/new" class="eyebrow text-amber text-[10px] hover:text-amber/70">+ New Post</a>
       </div>
-      <div>
-        <div class="logo-text">South Shore Sawyer</div>
-        <div class="logo-sub">Admin Panel</div>
+      <div class="divide-y divide-forest/5">
+        {posts.slice(0, 5).map((post: any) => (
+          <a href={`/admin/blog/${post.slug}`}
+             class="flex items-center justify-between px-6 py-3 hover:bg-sawdust/30 transition-colors">
+            <div>
+              <div class="font-display text-sm font-bold text-forest leading-tight">{post.title}</div>
+              <div class="font-mono text-[10px] text-steel/40 mt-0.5">{post.date} · {post.category}</div>
+            </div>
+            {post.featured && (
+              <span class="font-mono text-[9px] text-amber tracking-widest uppercase bg-amber/10 px-2 py-1 ml-3 flex-shrink-0">
+                Featured
+              </span>
+            )}
+          </a>
+        ))}
+      </div>
+      <div class="px-6 py-3 border-t border-forest/10">
+        <a href="/admin/blog" class="font-mono text-[10px] text-steel/40 hover:text-amber transition-colors">
+          View all {posts.length} posts →
+        </a>
       </div>
     </div>
 
-    <h1>Sign in</h1>
-    <p class="subtitle">Enter your admin password to continue</p>
-
-    <form id="login-form">
-      <label for="password">Password</label>
-      <input type="password" id="password" autocomplete="current-password" autofocus placeholder="••••••••••••" />
-      <button type="submit" class="btn" id="login-btn">Sign in →</button>
-      <div class="error" id="error-msg">Incorrect password. Try again.</div>
-    </form>
-
-    <a href="/" class="back">← Back to site</a>
+    <!-- Species list -->
+    <div class="bg-white border border-forest/10">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-forest/10">
+        <h2 class="font-display font-bold text-forest">Species</h2>
+        <a href="/admin/species/new" class="eyebrow text-amber text-[10px] hover:text-amber/70">+ New Species</a>
+      </div>
+      <div class="divide-y divide-forest/5">
+        {species.slice(0, 6).map((sp: any) => (
+          <a href={`/admin/species/${encodeURIComponent(sp.name)}`}
+             class="flex items-center justify-between px-6 py-3 hover:bg-sawdust/30 transition-colors">
+            <div>
+              <div class="font-display text-sm font-bold text-forest">{sp.name}</div>
+              <div class="font-mono text-[10px] text-steel/40 italic">{sp.latin}</div>
+            </div>
+            <div class="flex items-center gap-2 ml-3 flex-shrink-0">
+              <div class="flex gap-0.5">
+                {[...Array(5)].map((_: any, i: number) => (
+                  <div class={`w-1.5 h-1.5 rounded-full ${i < sp.rating ? 'bg-amber' : 'bg-forest/10'}`}></div>
+                ))}
+              </div>
+              {!sp.available && (
+                <span class="font-mono text-[9px] text-red-400">Unavailable</span>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="px-6 py-3 border-t border-forest/10">
+        <a href="/admin/species" class="font-mono text-[10px] text-steel/40 hover:text-amber transition-colors">
+          View all {species.length} species →
+        </a>
+      </div>
+    </div>
   </div>
 
-  <script is:inline>
-    document.getElementById('login-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      var password = document.getElementById('password').value;
-      var btn = document.getElementById('login-btn');
-      var errEl = document.getElementById('error-msg');
-
-      btn.disabled = true;
-      btn.textContent = 'Signing in...';
-      errEl.style.display = 'none';
-
-      try {
-        var res = await fetch('/api/blog/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password: password }),
-        });
-
-        if (res.ok) {
-          var data = await res.json();
-          // Store token in sessionStorage — cleared when tab closes
-          sessionStorage.setItem('sss_admin_token', data.token);
-          window.location.href = '/admin/dashboard';
-        } else {
-          errEl.style.display = 'block';
-          btn.disabled = false;
-          btn.textContent = 'Sign in →';
-          document.getElementById('password').value = '';
-          document.getElementById('password').focus();
-        }
-      } catch (err) {
-        errEl.textContent = 'Connection error. Check that the API worker is deployed.';
-        errEl.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Sign in →';
-      }
-    });
-
-    // If already logged in, redirect straight to dashboard
-    if (sessionStorage.getItem('sss_admin_token')) {
-      window.location.href = '/admin/dashboard';
-    }
-  </script>
-</body>
-</html>
+  <!-- Quick links -->
+  <div class="mt-6 bg-white border border-forest/10 p-6">
+    <h2 class="font-display font-bold text-forest mb-4">Quick Links</h2>
+    <div class="flex flex-wrap gap-3">
+      <a href="/" target="_blank" class="btn-secondary text-sm">View Site ↗</a>
+      <a href="/blog" target="_blank" class="btn-secondary text-sm">Field Notes ↗</a>
+      <a href="/species" target="_blank" class="btn-secondary text-sm">Species ↗</a>
+      <a href="/calculator" target="_blank" class="btn-secondary text-sm">Calculator ↗</a>
+    </div>
+  </div>
+</Admin>

@@ -1,0 +1,68 @@
+---
+export const prerender = false;
+import Admin from '../../../layouts/Admin.astro';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+const species = JSON.parse(readFileSync(resolve('src/data/species.json'), 'utf-8'));
+---
+
+<Admin title="Species Library" section="species">
+  <div class="flex items-center justify-between mb-6">
+    <div class="font-mono text-xs text-steel/50">{species.length} species documented</div>
+    <a href="/admin/species/new" class="btn-primary text-sm">+ New Species</a>
+  </div>
+
+  <div class="bg-white border border-forest/10">
+    <div class="grid grid-cols-[1fr_auto_auto_auto_auto] gap-0 px-6 py-3 border-b border-forest/10 bg-sawdust/30">
+      <div class="font-mono text-[10px] text-steel/40 tracking-widest uppercase">Species</div>
+      <div class="font-mono text-[10px] text-steel/40 tracking-widest uppercase px-4">Rating</div>
+      <div class="font-mono text-[10px] text-steel/40 tracking-widest uppercase px-4">Drying</div>
+      <div class="font-mono text-[10px] text-steel/40 tracking-widest uppercase px-4">Available</div>
+      <div class="font-mono text-[10px] text-steel/40 tracking-widest uppercase px-4">Actions</div>
+    </div>
+
+    <div class="divide-y divide-forest/5">
+      {species.map((sp: any) => (
+        <div class="grid grid-cols-[1fr_auto_auto_auto_auto] gap-0 px-6 py-4 items-center hover:bg-sawdust/20 transition-colors">
+          <div>
+            <div class="font-display font-bold text-forest text-sm">{sp.name}</div>
+            <div class="font-mono text-[10px] text-steel/40 italic">{sp.latin}</div>
+          </div>
+          <div class="px-4 flex gap-0.5">
+            {[...Array(5)].map((_: any, i: number) => (
+              <div class={`w-2 h-2 rounded-full ${i < sp.rating ? 'bg-amber' : 'bg-forest/10'}`}></div>
+            ))}
+          </div>
+          <div class="px-4 font-mono text-[10px] text-steel/50">{sp.drying}</div>
+          <div class="px-4">
+            {sp.available
+              ? <span class="font-mono text-[10px] text-green-600">✓ Yes</span>
+              : <span class="font-mono text-[10px] text-red-400">✕ No</span>
+            }
+          </div>
+          <div class="px-4 flex items-center gap-3">
+            <a href={`/admin/species/${encodeURIComponent(sp.name)}`}
+               class="font-mono text-[10px] text-amber hover:underline">Edit</a>
+            <button
+              class="font-mono text-[10px] text-red-400 hover:underline delete-species"
+              data-name={sp.name}
+            >Delete</button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Admin>
+
+<script>
+  document.querySelectorAll('.delete-species').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const el = e.currentTarget;
+      if (!confirm(`Delete "${el.dataset.name}"?`)) return;
+      const res = await fetch(`/api/species/${encodeURIComponent(el.dataset.name!)}`, { method: 'DELETE' });
+      if (res.ok) location.reload();
+      else alert('Failed to delete species');
+    });
+  });
+</script>

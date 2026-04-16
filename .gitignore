@@ -27,5 +27,15 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Editor (extended)
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
 # Logs
 *.log
+npm-debug.log*
+
+# Sessions
+.sessions/

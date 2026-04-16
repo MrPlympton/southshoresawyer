@@ -1,0 +1,103 @@
+---
+export const prerender = false;
+import Admin from '../../../layouts/Admin.astro';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+const { slug } = Astro.params;
+const posts = JSON.parse(readFileSync(resolve('src/data/posts.json'), 'utf-8'));
+const post = posts.find((p: any) => p.slug === slug);
+
+if (!post) return Astro.redirect('/admin/blog');
+
+const categories = ['Field Notes', 'Drying & Curing', 'Equipment', 'DIY & Builds', 'Species'];
+---
+
+<Admin title="Edit Post" section="blog">
+  <div class="max-w-2xl">
+    <a href="/admin/blog" class="font-mono text-[10px] text-steel/40 hover:text-amber transition-colors mb-6 inline-block">
+      ← Back to posts
+    </a>
+
+    <div class="bg-white border border-forest/10 p-8">
+      <form id="post-form" data-original-slug={post.slug} class="space-y-5">
+        <div>
+          <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Title</label>
+          <input name="title" type="text" required value={post.title}
+                 class="w-full border border-forest/15 font-display text-lg text-forest px-4 py-3 focus:outline-none focus:border-amber transition-colors" />
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Slug</label>
+          <input name="slug" type="text" required value={post.slug}
+                 class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors" />
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Excerpt</label>
+          <textarea name="excerpt" required rows={3}
+                    class="w-full border border-forest/15 font-sans text-sm text-steel px-4 py-3 focus:outline-none focus:border-amber transition-colors resize-none">{post.excerpt}</textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Category</label>
+            <select name="category" required
+                    class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors bg-white">
+              {categories.map(cat => <option value={cat} selected={cat === post.category}>{cat}</option>)}
+            </select>
+          </div>
+          <div>
+            <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Read Time</label>
+            <input name="readTime" type="text" value={post.readTime}
+                   class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors" />
+          </div>
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Date</label>
+          <input name="date" type="text" required value={post.date}
+                 class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors" />
+        </div>
+
+        <div class="flex items-center gap-3">
+          <input type="checkbox" name="featured" id="featured" class="w-4 h-4 accent-amber"
+                 checked={post.featured} />
+          <label for="featured" class="font-mono text-xs text-steel/60">Mark as featured post</label>
+        </div>
+
+        <div class="pt-4 flex gap-3">
+          <button type="submit" class="btn-primary">Update Post</button>
+          <a href="/admin/blog" class="btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</Admin>
+
+<script>
+  const form = document.getElementById('post-form');
+  if (form) {
+    const originalSlug = form.dataset.originalSlug;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      const updated = {
+        slug: data.slug,
+        title: data.title,
+        excerpt: data.excerpt,
+        date: data.date,
+        category: data.category,
+        readTime: data.readTime || '5 min',
+        featured: 'featured' in data,
+      };
+      const res = await fetch(`/api/posts/${originalSlug}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated),
+      });
+      if (res.ok) window.location.href = '/admin/blog';
+      else alert('Failed to update post');
+    });
+  }
+</script>

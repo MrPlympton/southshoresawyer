@@ -1,0 +1,67 @@
+---
+export const prerender = false;
+import Admin from '../../../layouts/Admin.astro';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+const posts = JSON.parse(readFileSync(resolve('src/data/posts.json'), 'utf-8'));
+---
+
+<Admin title="Field Notes" section="blog">
+  <div class="flex items-center justify-between mb-6">
+    <div class="font-mono text-xs text-steel/50">{posts.length} posts total</div>
+    <a href="/admin/blog/new" class="btn-primary text-sm">+ New Post</a>
+  </div>
+
+  <div class="bg-white border border-forest/10">
+    <div class="grid grid-cols-[1fr_auto_auto_auto_auto] gap-0 px-6 py-3 border-b border-forest/10 bg-sawdust/30">
+      <div class="font-mono text-[10px] text-steel/40 tracking-widest uppercase">Title</div>
+      <div class="font-mono text-[10px] text-steel/40 tracking-widest uppercase px-4">Category</div>
+      <div class="font-mono text-[10px] text-steel/40 tracking-widest uppercase px-4">Date</div>
+      <div class="font-mono text-[10px] text-steel/40 tracking-widest uppercase px-4">Featured</div>
+      <div class="font-mono text-[10px] text-steel/40 tracking-widest uppercase px-4">Actions</div>
+    </div>
+
+    <div class="divide-y divide-forest/5">
+      {posts.map((post: any) => (
+        <div class="grid grid-cols-[1fr_auto_auto_auto_auto] gap-0 px-6 py-4 items-center hover:bg-sawdust/20 transition-colors">
+          <div>
+            <div class="font-display font-bold text-forest text-sm leading-tight">{post.title}</div>
+            <div class="font-mono text-[10px] text-steel/40 mt-0.5 line-clamp-1">{post.excerpt}</div>
+          </div>
+          <div class="px-4">
+            <span class="font-mono text-[10px] text-amber bg-amber/10 px-2 py-1 tracking-wide">{post.category}</span>
+          </div>
+          <div class="px-4 font-mono text-[10px] text-steel/50">{post.date}</div>
+          <div class="px-4">
+            {post.featured
+              ? <span class="font-mono text-[10px] text-green-600">★ Yes</span>
+              : <span class="font-mono text-[10px] text-steel/30">—</span>
+            }
+          </div>
+          <div class="px-4 flex items-center gap-3">
+            <a href={`/admin/blog/${post.slug}`}
+               class="font-mono text-[10px] text-amber hover:underline">Edit</a>
+            <button
+              class="font-mono text-[10px] text-red-400 hover:underline delete-post"
+              data-slug={post.slug}
+              data-title={post.title}
+            >Delete</button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Admin>
+
+<script>
+  document.querySelectorAll('.delete-post').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const el = e.currentTarget;
+      if (!confirm(`Delete "${el.dataset.title}"?`)) return;
+      const res = await fetch(`/api/posts/${el.dataset.slug}`, { method: 'DELETE' });
+      if (res.ok) location.reload();
+      else alert('Failed to delete post');
+    });
+  });
+</script>

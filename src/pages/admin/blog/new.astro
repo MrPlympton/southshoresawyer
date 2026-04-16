@@ -1,0 +1,99 @@
+---
+export const prerender = false;
+import Admin from '../../../layouts/Admin.astro';
+
+const categories = ['Field Notes', 'Drying & Curing', 'Equipment', 'DIY & Builds', 'Species'];
+---
+
+<Admin title="New Post" section="blog">
+  <div class="max-w-2xl">
+    <a href="/admin/blog" class="font-mono text-[10px] text-steel/40 hover:text-amber transition-colors mb-6 inline-block">
+      ← Back to posts
+    </a>
+
+    <div class="bg-white border border-forest/10 p-8">
+      <form id="post-form" class="space-y-5">
+        <div>
+          <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Title *</label>
+          <input name="title" type="text" required
+                 class="w-full border border-forest/15 font-display text-lg text-forest px-4 py-3 focus:outline-none focus:border-amber transition-colors" />
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Slug *</label>
+          <input name="slug" type="text" required
+                 placeholder="my-post-slug"
+                 class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors" />
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Excerpt *</label>
+          <textarea name="excerpt" required rows={3}
+                    class="w-full border border-forest/15 font-sans text-sm text-steel px-4 py-3 focus:outline-none focus:border-amber transition-colors resize-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Category *</label>
+            <select name="category" required
+                    class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors bg-white">
+              {categories.map(cat => <option value={cat}>{cat}</option>)}
+            </select>
+          </div>
+          <div>
+            <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Read Time</label>
+            <input name="readTime" type="text" placeholder="8 min"
+                   class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors" />
+          </div>
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] text-steel/60 tracking-widest uppercase block mb-2">Date *</label>
+          <input name="date" type="text" required placeholder="April 15, 2025"
+                 class="w-full border border-forest/15 font-mono text-sm text-forest px-4 py-2.5 focus:outline-none focus:border-amber transition-colors" />
+        </div>
+
+        <div class="flex items-center gap-3">
+          <input type="checkbox" name="featured" id="featured" class="w-4 h-4 accent-amber" />
+          <label for="featured" class="font-mono text-xs text-steel/60">Mark as featured post</label>
+        </div>
+
+        <div class="pt-4 flex gap-3">
+          <button type="submit" class="btn-primary">Save Post</button>
+          <a href="/admin/blog" class="btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</Admin>
+
+<script>
+  // Auto-generate slug from title
+  const titleEl = document.querySelector('[name="title"]') 
+  const slugEl = document.querySelector('[name="slug"]') 
+  titleEl?.addEventListener('input', () => {
+    slugEl.value = titleEl.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  });
+
+  document.getElementById('post-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form));
+    const post = {
+      slug: data.slug,
+      title: data.title,
+      excerpt: data.excerpt,
+      date: data.date,
+      category: data.category,
+      readTime: data.readTime || '5 min',
+      featured: 'featured' in data,
+    };
+    const res = await fetch('/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(post),
+    });
+    if (res.ok) window.location.href = '/admin/blog';
+    else alert('Failed to save post');
+  });
+</script>

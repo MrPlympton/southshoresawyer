@@ -3,54 +3,9 @@ import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import Newsletter from '../../components/Newsletter.astro';
+import postsData from '../../data/posts.json';
 
-const posts = [
-  {
-    slug: 'milling-white-oak-wm3',
-    title: 'Milling White Oak on the WM3: What I Learned the Hard Way',
-    excerpt: 'White oak is unforgiving. Grain direction, moisture content, and blade tension all conspire against you. Here\'s the setup that finally worked after three wasted logs.',
-    date: 'April 8, 2025',
-    category: 'Field Notes',
-    readTime: '8 min',
-    featured: true,
-  },
-  {
-    slug: 'air-drying-stacking-guide',
-    title: 'The Only Stacking Guide You Need for Air Drying Lumber',
-    excerpt: 'Bad sticker placement. Insufficient airflow. Skipping the end sealer. These are the three mistakes that ruin more air-dried lumber than anything else.',
-    date: 'March 28, 2025',
-    category: 'Drying & Curing',
-    readTime: '6 min',
-    featured: false,
-  },
-  {
-    slug: 'woodland-mills-wm3-blade-guide',
-    title: 'WM3 Blade Selection: The Definitive Breakdown',
-    excerpt: 'After running through a dozen blade types across hardwoods and softwoods, I\'ve landed on two go-to blades and one niche choice for figured wood.',
-    date: 'March 15, 2025',
-    category: 'Equipment',
-    readTime: '10 min',
-    featured: false,
-  },
-  {
-    slug: '3d-printed-log-dogs',
-    title: '3D Printed Log Dogs That Actually Hold',
-    excerpt: 'Commercial log dogs are expensive and often the wrong geometry for small-diameter logs. I designed a set in Fusion 360, printed them in PETG, and they\'ve held up for 200+ cuts.',
-    date: 'March 2, 2025',
-    category: 'DIY & Builds',
-    readTime: '7 min',
-    featured: false,
-  },
-  {
-    slug: 'south-shore-species-guide',
-    title: 'What Grows on the South Shore: A Sawyer\'s Field Guide',
-    excerpt: 'Plymouth County is dense with white pine, red oak, and white oak. Less commonly: black cherry, ash (before the EAB), and the occasional butternut. Here\'s what to look for.',
-    date: 'Feb 18, 2025',
-    category: 'Species',
-    readTime: '12 min',
-    featured: false,
-  },
-];
+const posts = postsData;
 
 const categories = ['All', 'Field Notes', 'Species', 'Equipment', 'Drying & Curing', 'DIY & Builds'];
 ---

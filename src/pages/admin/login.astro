@@ -1,0 +1,73 @@
+---
+export const prerender = false;
+import '../../styles/global.css';
+
+const error = Astro.url.searchParams.get('error');
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — South Shore Sawyer</title>
+</head>
+<body class="bg-forest min-h-screen flex items-center justify-center grain">
+  <div class="ring-lines absolute inset-0 opacity-40 pointer-events-none"></div>
+
+  <div class="relative z-10 w-full max-w-sm px-6">
+    <!-- Logo -->
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center justify-center w-14 h-14 bg-amber mb-4">
+        <svg width="28" height="28" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="7" stroke="#1C2E1C" stroke-width="1.5" fill="none"/>
+          <circle cx="9" cy="9" r="2.5" fill="#1C2E1C"/>
+          <line x1="9" y1="2" x2="9" y2="4" stroke="#1C2E1C" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="9" y1="14" x2="9" y2="16" stroke="#1C2E1C" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="2" y1="9" x2="4" y2="9" stroke="#1C2E1C" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="14" y1="9" x2="16" y2="9" stroke="#1C2E1C" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1 class="font-display font-bold text-cream text-2xl">Admin Access</h1>
+      <p class="font-mono text-[10px] text-sawdust/40 tracking-widest uppercase mt-1">South Shore Sawyer</p>
+    </div>
+
+    <!-- Form -->
+    <form method="POST" action="/api/auth/login" class="space-y-4">
+      {error && (
+        <div class="bg-red-900/40 border border-red-500/30 px-4 py-3 font-mono text-xs text-red-300">
+          ✕ Incorrect password. Try again.
+        </div>
+      )}
+
+      <div>
+        <label class="font-mono text-[10px] text-sawdust/50 tracking-widest uppercase block mb-2">
+          Password
+        </label>
+        <input
+          type="password"
+          name="password"
+          autofocus
+          required
+          class="w-full bg-cream/10 border border-cream/20 text-cream font-mono text-sm px-4 py-3
+                 focus:outline-none focus:border-amber transition-colors placeholder-cream/20"
+          placeholder="Enter admin password"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-amber text-bark font-display font-bold py-3 text-sm
+               hover:bg-amber/90 transition-colors tracking-wide"
+      >
+        Enter the Mill →
+      </button>
+    </form>
+
+    <div class="mt-8 text-center">
+      <a href="/" class="font-mono text-[10px] text-sawdust/30 hover:text-sawdust/60 transition-colors tracking-widest uppercase">
+        ← Back to site
+      </a>
+    </div>
+  </div>
+</body>
+</html>

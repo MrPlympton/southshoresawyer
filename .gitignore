@@ -31,3 +31,6 @@ npm-debug.log*
 
 # Sessions
 .sessions/
+
+# Wrangler
+.wrangler/

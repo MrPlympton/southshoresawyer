@@ -1,5 +1,5 @@
-name = "southshoresawyer-workers"
-main = "workers/blog-api.js"
+name = "southshoresawyer"
+pages_build_output_dir = "dist"
 compatibility_date = "2024-01-01"
 
 # KV Namespace — create this first with:

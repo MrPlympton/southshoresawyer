@@ -1,4 +1,3 @@
-export const prerender = false;
 import type { APIRoute } from 'astro';
 import { readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';

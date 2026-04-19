@@ -25,8 +25,14 @@ const year = new Date().getFullYear();
       <div>
         <div class="eyebrow text-amber/60 mb-4">Content</div>
         <ul class="space-y-2">
-          {['Field Notes', 'Species Guide', 'Mill Setup', 'Jigs & Fixtures', 'Drying & Curing'].map(l => (
-            <li><a href="#" class="text-sawdust/50 hover:text-amber text-sm transition-colors">{l}</a></li>
+          {[
+            { label: 'Field Notes',    href: '/blog' },
+            { label: 'Species Guide',  href: '/species' },
+            { label: 'Mill Setup',     href: '/blog' },
+            { label: 'Jigs & Fixtures',href: '/blog' },
+            { label: 'Drying & Curing',href: '/blog' },
+          ].map(({ label, href }) => (
+            <li><a href={href} class="text-sawdust/50 hover:text-amber text-sm transition-colors">{label}</a></li>
           ))}
         </ul>
       </div>
@@ -34,8 +40,14 @@ const year = new Date().getFullYear();
       <div>
         <div class="eyebrow text-amber/60 mb-4">Tools</div>
         <ul class="space-y-2">
-          {['Board Foot Calculator', 'Drying Time Estimator', 'Species Selector', 'Log Advisor AI', 'Community'].map(l => (
-            <li><a href="#" class="text-sawdust/50 hover:text-amber text-sm transition-colors">{l}</a></li>
+          {[
+            { label: 'Board Foot Calculator',  href: '/calculator' },
+            { label: 'Drying Time Estimator',  href: '/calculator' },
+            { label: 'Species Selector',       href: '/species' },
+            { label: 'Log Advisor AI',         href: '/calculator' },
+            { label: 'Community',              href: '/community' },
+          ].map(({ label, href }) => (
+            <li><a href={href} class="text-sawdust/50 hover:text-amber text-sm transition-colors">{label}</a></li>
           ))}
         </ul>
       </div>

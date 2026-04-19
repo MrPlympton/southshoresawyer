@@ -1,3 +1,7 @@
 name = "southshoresawyer"
 pages_build_output_dir = "dist"
 compatibility_date = "2024-09-23"
+
+[[kv_namespaces]]
+binding = "BLOG_KV"
+id = "b8855e7ba60f4fe9b777afaacb1d4221"

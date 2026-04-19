@@ -1,20 +1,19 @@
+export const prerender = false;
 import type { APIRoute } from 'astro';
-import { readFileSync, writeFileSync } from 'fs';
-import { resolve } from 'path';
 
-const dataPath = resolve('src/data/posts.json');
-
-export const GET: APIRoute = async () => {
-  const posts = JSON.parse(readFileSync(dataPath, 'utf-8'));
+export const GET: APIRoute = async ({ locals }) => {
+  const kv = locals.runtime.env.BLOG_KV;
+  const posts = (await kv.get('posts', { type: 'json' })) as any[] ?? [];
   return new Response(JSON.stringify(posts), {
     headers: { 'Content-Type': 'application/json' },
   });
 };
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
+  const kv = locals.runtime.env.BLOG_KV;
   const post = await request.json();
-  const posts = JSON.parse(readFileSync(dataPath, 'utf-8'));
+  const posts = (await kv.get('posts', { type: 'json' })) as any[] ?? [];
   posts.unshift(post);
-  writeFileSync(dataPath, JSON.stringify(posts, null, 2));
+  await kv.put('posts', JSON.stringify(posts));
   return new Response(JSON.stringify(post), { status: 201 });
 };

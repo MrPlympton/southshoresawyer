@@ -1,23 +1,21 @@
-export const getStaticPaths = () => [];
+export const prerender = false;
 import type { APIRoute } from 'astro';
-import { readFileSync, writeFileSync } from 'fs';
-import { resolve } from 'path';
 
-const dataPath = resolve('src/data/posts.json');
-
-export const PUT: APIRoute = async ({ params, request }) => {
-  const posts = JSON.parse(readFileSync(dataPath, 'utf-8'));
+export const PUT: APIRoute = async ({ params, request, locals }) => {
+  const kv = locals.runtime.env.BLOG_KV;
+  const posts = (await kv.get('posts', { type: 'json' })) as any[] ?? [];
   const updated = await request.json();
   const idx = posts.findIndex((p: any) => p.slug === params.slug);
   if (idx === -1) return new Response('Not found', { status: 404 });
   posts[idx] = updated;
-  writeFileSync(dataPath, JSON.stringify(posts, null, 2));
+  await kv.put('posts', JSON.stringify(posts));
   return new Response(JSON.stringify(updated));
 };
 
-export const DELETE: APIRoute = async ({ params }) => {
-  let posts = JSON.parse(readFileSync(dataPath, 'utf-8'));
+export const DELETE: APIRoute = async ({ params, locals }) => {
+  const kv = locals.runtime.env.BLOG_KV;
+  let posts = (await kv.get('posts', { type: 'json' })) as any[] ?? [];
   posts = posts.filter((p: any) => p.slug !== params.slug);
-  writeFileSync(dataPath, JSON.stringify(posts, null, 2));
+  await kv.put('posts', JSON.stringify(posts));
   return new Response(null, { status: 204 });
 };
